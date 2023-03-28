@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="imms.dao.RoomMapper">
+    <!--查找:不确定用户输入了哪些值-->
+    <select id="selectRoom" resultType="imms.model.Room">
+        select * from roominfo
+        <where>
+            <if test="roomId!=null &amp; roomId!=-1 ">
+                roomId = #{roomId}
+            </if>
+            <if test="roomSize != null &amp; roomSize != -1">
+                AND roomSize = #{roomSize}
+            </if>
+            <if test="roomOpenTime != null &amp; roomOpenTime!='' ">
+                AND roomOpenTime &lt;= #{roomOpenTime}
+            </if>
+            <if test="roomCloseTime != null &amp; roomCloseTime != ''">
+                AND roomCloseTime &gt;= #{roomCloseTime}
+            </if>
+            <if test="roomNumber != null &amp; roomNumber != ''  ">
+                AND roomNumber like #{roomNumber}
+            </if>
+            <if test="roomAddress != null &amp; roomAddress != ''">
+                AND roomAddress like #{roomAddress}
+            </if>
+
+        </where>
+    </select>
+
+    <!--检查是否已经存在会议室 -->
+
+    <select id="hasRoom" resultType="imms.model.Room">
+        select * from roominfo
+        <where>
+            <if test="roomNumber != null &amp; roomNumber != '' ">
+                AND roomNumber = #{roomNumber}
+            </if>
+            <if test="roomAddress != null &amp; roomAddress != ''">
+                AND roomAddress = #{roomAddress}
+            </if>
+
+        </where>
+    </select>
+
+    <!--插入-->
+    <insert id="addRoom" parameterType="imms.model.Room" keyProperty="roomId" useGeneratedKeys="true">
+        insert into roominfo (roomId,roomSize,roomOpenTime,roomCloseTime,roomNumber,roomAddress)
+        values(0,#{roomSize},#{roomOpenTime},#{roomCloseTime},#{roomNumber},#{roomAddress})
+    </insert>
+
+    <!--修改-->
+    <update id="updateRoom" parameterType="imms.model.Room" >
+        update roominfo set
+        roomSize = #{roomSize},
+        roomOpenTime = #{roomOpenTime},
+        roomCloseTime = #{roomCloseTime},
+        roomNumber = #{roomNumber},
+        roomAddress = #{roomAddress}
+        where roomId = #{roomId}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteRoom" parameterType="int">
+        delete from roominfo where roomId = #{roomId};
+    </delete>
+
+</mapper>

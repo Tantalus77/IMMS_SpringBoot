@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="imms.dao.UserMapper">
+    <!--查找:不确定用户输入了哪些值-->
+    <select id="select" resultType="imms.model.User">
+        select * from userinfo
+        <where>
+            <if test="userId!=null &amp; userId!='' ">
+                userId = #{userId}
+            </if>
+            <if test="userName != null &amp; userName != ''">
+                AND userName like #{userName}
+            </if>
+            <if test="userNumber != null &amp; userNumber!='' ">
+                AND userNumber like #{userNumber}
+            </if>
+            <if test="userPhoneNumber != null &amp; userPhoneNumber != ''">
+                AND userPhoneNumber like #{userPhoneNumber}
+            </if>
+            <if test="userEmail != null &amp; userEmail != '' ">
+                AND userEmail like #{userEmail}
+            </if>
+            <if test="isAdmin != null &amp; isAdmin != ''">
+                AND isAdmin = #{isAdmin}
+            </if>
+            
+        </where>
+    </select>
+
+    <!--查找:不确定用户输入了哪些值,并且忽略userName、管理员权限、密码
+        因为userName允许重复，这个方法主要用于验证注册时用户输入的信息是否正确-->
+    <select id="check" resultType="imms.model.User">
+        select * from userinfo
+        <where>
+            <if test="userId!=null &amp; userId!= 0 ">
+                userId = #{userId}
+            </if>
+            <if test="userNumber != null &amp; userNumber!='' ">
+                AND userNumber like #{userNumber}
+            </if>
+            <if test="userPhoneNumber != null &amp; userPhoneNumber != ''">
+                AND userPhoneNumber like #{userPhoneNumber}
+            </if>
+            <if test="userEmail != null &amp; userEmail != '' ">
+                AND userEmail like #{userEmail}
+            </if>
+
+        </where>
+    </select>
+
+    <!--插入-->
+    <insert id="addUser" parameterType="imms.model.User" keyProperty="userId" useGeneratedKeys="true">
+        insert into userinfo
+        values(0,#{userName},#{userNumber},#{userPhoneNumber},#{userPassword},#{userEmail},#{isAdmin})
+    </insert>
+
+    <!--修改-->
+    <update id="updateUser" parameterType="imms.model.User" >
+        update userinfo set
+        userName = #{userName},
+        userNumber = #{userNumber},
+        userPhoneNumber = #{userPhoneNumber},
+        userPassword = #{userPassword},
+        userEmail = #{userEmail},
+        isAdmin = #{isAdmin}
+        where userId = #{userId}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteUser" parameterType="int">
+        delete from userinfo where userId = #{userId};
+    </delete>
+
+</mapper>

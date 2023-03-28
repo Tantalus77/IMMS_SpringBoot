@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>adminHome</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui/lib/index.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <link rel="stylesheet" type="text/css"  href="../js/element-ui/lib/theme-chalk/index.css">
+
+    <style>
+    .el-container{
+        animation: main 1.5s
+    }
+    .el-main {
+        animation: main 0.3s
+    }
+
+
+    .el-header {
+       background-color: rgba(137,183,250,0.5);
+       color: #333;
+       line-height: 60px;
+      }
+
+    .el-aside {
+       color: #333;
+      }
+    @keyframes main{
+        0%{opacity:0.5;}
+        100%{opacity:1;}
+    }
+
+    .descriptions{
+        padding: 10px;
+        border-radius: 10px;
+        background-color: rgba(137,183,250,0.3);
+
+    }
+    .edit{
+        transition-duration:0.2s;
+        border:1px;
+        border-radius:5px;
+        background-color:rgba(137,183,250,0.7);
+        font-size:18px;
+        font-weight:bold;
+        height:40px;
+    }
+    .edit:hover{
+        background-color:rgba(90,132,193,1);
+    }
+    .dangerous{
+        transition-duration:0.2s;
+        border:1px;
+        border-radius:5px;
+        background-color:rgba(229, 95, 42, 1);
+        font-size:18px;
+        font-weight:bold;
+        height:40px;
+    }
+    .dangerous:hover{
+        background-color:rgba(182, 78, 37, 1);
+    }
+
+    .inputBox{
+        background-color:rgba(255,255,255,0.7);
+        border:1px;
+        border-radius:5px;
+        height:30px;
+        width:400px;
+
+    }
+    .err_msg{
+        position:relative;
+        top:-18px;
+        left:100px;
+        font-size:13px;
+        font-weight:bold;
+        color:rgba(194, 75, 11, 0.82);
+    }
+    #welcome{
+        position:relative;
+        font-size:50px;
+        font-weight:bold;
+        opacity:0.9;
+
+    }
+
+    </style>
+
+</head>
+<body>
+<div id="app">
+    <el-header ><h2>IMMS智能会议室管理系统</h2></el-header>
+    <el-container style="height: 830px; border: 1px solid #eee">
+        <el-aside width="200px" style="background-color: rgba(137,183,250,0.5)">
+            <el-menu :default-openeds="['0','1','2','3']">
+                <el-submenu index="0">
+                    <template slot="title"><h2>简介</h2></template>
+                    <el-menu-item index="0-1" @click="index = '0-1'">简介</el-menu-item>
+                </el-submenu>
+                <el-submenu index="1">
+                    <template slot="title"><h2>我的信息</h2></template>
+                    <el-menu-item index="1-1" @click="index = '1-1'">基本信息</el-menu-item>
+                    <el-menu-item index="1-2" @click="index = '1-2'">修改密码</el-menu-item>
+                </el-submenu>
+                <el-submenu index="2">
+                    <template slot="title"><h2>用户管理</h2></template>
+                    <el-menu-item index="2-1" @click="index = '2-1'">所有用户</el-menu-item>
+                    <el-menu-item index="2-2" @click="index = '2-2'">批量注册</el-menu-item>
+                </el-submenu>
+                <el-submenu index="3">
+                    <template slot="title"><h2>会议室管理</h2></template>
+                    <el-menu-item index="3-1" @click="index = '3-1'">所有会议室</el-menu-item>
+                    <el-menu-item index="3-2" @click="index = '3-2'">所有预约</el-menu-item>
+                    <el-menu-item index="3-3" @click="index = '3-3'">批量导入会议室</el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </el-aside>
+
+
+        <el-container>
+            <el-main v-show="index == '0-1' ">
+                <div id="default" title="欢迎界面">
+                    <div class = "descriptions">
+                        <article>
+                            <h2>欢迎使用IMMS智能会议室管理系统！{{currentUser.userName}}同志。</h2>
+                            <p>&emsp;IMMS(Intelligent Meeting room Management System)智能会议室管理系统是一款由沙袋带专生自主研发的一款全旧会议室管理系统。</p>
+                            <p>&emsp;系统开发在一个被称为「沙河带专」的真实世界，在这里，被导师选中的人将被授予「DDL」，导引「代码之力」。</p>
+                            <p>&emsp;你将扮演一位名为「带专生」的神秘角色，在快乐的开发中邂逅性格各异、能力独特的Bug，和他们一起击溃自己的心理防线，找到“再也不想写代码”的理由——同时，逐步发掘「IMMS」的真相。</p>
+                            <br><h2>如何使用？</h2>
+                            <p>&emsp;请看左侧导航栏。如果还是不明白该怎样使用，请点进去看看。</p>
+                            <p>&emsp;以防万一，如果您点进去了都还不明白如何使用，请点击屏幕右上角的“x”形状的按钮。</p>
+                            <br><h2>提示：您是管理员用户。请不要胡作非为。</h2>
+                        </article>
+                    </div>
+                </div>
+            </el-main>
+            <el-main v-show="index == '1-1' ">
+                <div id="information" title="用户信息">
+                    <h2>用户信息</h2>
+                    <input type="button" class="edit" id="editCurUserInfo" value = "修改信息" @click="updateDialogFormVisible = true"><br><br>
+                    <el-dialog title="修改信息" :visible.sync="updateDialogFormVisible">
+                        <el-form :model="curUserUpdateInfo">
+                            <el-form-item label="姓名" :label-width="formLabelWidth">
+                                <el-input v-model="curUserUpdateInfo.userName" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="邮箱" :label-width="formLabelWidth">
+                                <el-input v-model="curUserUpdateInfo.userEmail" autocomplete="off"></el-input>
+                            </el-form-item>
+                            <el-form-item label="手机号" :label-width="formLabelWidth">
+                                <el-input v-model="curUserUpdateInfo.userPhoneNumber" autocomplete="off"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="updateDialogFormVisible = false">取 消</el-button>
+                            <el-button type="primary"  @click="updateDialogFormVisible = false;editCurUserInfo()" >确 定</el-button>
+                        </div>
+                    </el-dialog>
+                    <div class = "descriptions">
+                        <div class = "description"><el-tag effect="plain" size="medium">姓名：</el-tag>&emsp;{{currentUser.userName}}</div><br>
+                        <div class = "description"><el-tag effect="plain" size="medium">ID：</el-tag>&emsp;{{currentUser.userId}}</div><br>
+                        <div class = "description"><el-tag effect="plain" size="medium">内部号：</el-tag>&emsp;{{currentUser.userNumber}}</div><br>
+                        <div class = "description"><el-tag effect="plain" size="medium">邮箱：</el-tag>&emsp;{{currentUser.userEmail}}</div><br>
+                        <div class = "description"><el-tag effect="plain" size="medium">手机号：</el-tag>&emsp;{{currentUser.userPhoneNumber}}</div><br>
+                        <div class = "description" v-show="currentUser.isAdmin == '1'"><el-tag effect="plain" size="medium">管理员权限：</el-tag>&emsp;管理员</div>
+                        <div class = "description" v-show="currentUser.isAdmin == '0'"><el-tag effect="plain" size="medium">管理员权限：</el-tag>&emsp;无</div>
+                    </div>
+                </div>
+            </el-main>
+
+            <el-main v-show="index == '1-2' ">
+                <div id="editPassword" title="修改密码">
+                    <h2>修改密码</h2>
+                    <div class = "descriptions">
+                        原密码：<input class="inputBox" type="password" @input="checkOld()" v-model="oldPsw"><br><br>
+                        <div class="err_msg" id="oldPswErr" v-show="Err.oldPswErr == 1">您输入的密码与您的密码不符！</div>
+                        新密码：<input class="inputBox" type="password" @input="checkNew()" v-model="newPsw"><br><br>
+                        <div class="err_msg" id="newPswErr" v-show="Err.newPswErr == 1">新密码必须大于6位小于12位！</div>
+                        确认新密码：<input class="inputBox" type="password" @input="checkRepNew()" v-model="repNewPsw"><br><br>
+                        <div class="err_msg" id="repNewPswErr" v-show="Err.repNewPswErr == 1">与您输入的新密码不一致！</div>
+                        <input type="button" class="edit" id="editPsw" value = "确认修改" @click="updatePsw();"><br>
+                    </div>
+                </div>
+            </el-main>
+
+            <el-main v-show="index == '2-1' ">
+                <input type="button" class="edit" id="addUser" value = "添加用户" @click="addUserDialogFormVisible = true">
+                <el-dialog title="添加用户" :visible.sync="addUserDialogFormVisible">
+                    <el-form :model="addUserInfo">
+                        <el-form-item label="姓名" :label-width="formLabelWidth">
+                            <el-input v-model="addUserInfo.userName" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="内部号" :label-width="formLabelWidth">
+                            <el-input v-model="addUserInfo.userNumber" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="手机号" :label-width="formLabelWidth">
+                            <el-input v-model="addUserInfo.userPhoneNumber" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="密码" :label-width="formLabelWidth">
+                            <el-input v-model="addUserInfo.userPassword" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="邮箱" :label-width="formLabelWidth">
+                            <el-input v-model="addUserInfo.userEmail" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="管理员权限" :label-width="formLabelWidth">
+                            <el-radio-group v-model="addUserInfo.isAdmin">
+                                <el-radio label="1">管理员</el-radio>
+                                <el-radio label="0">普通用户</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="addUserDialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary"  @click="addUserDialogFormVisible = false;addUser()" >确 定</el-button>
+                    </div>
+                </el-dialog>
+                <input type="button" class="dangerous" id="deleteUsers" value = "批量删除用户" @click="deleteUserDialogFormVisible = true">
+                <el-dialog title="批量删除用户" :visible.sync="deleteUserDialogFormVisible">
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="deleteUserDialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary"  @click="deleteUserDialogFormVisible = false;deleteUsers()" >确 定</el-button>
+                    </div>
+                </el-dialog>
+                <el-divider></el-divider>
+                <el-form :inline="true" :model="userConditions" size="mini">
+                    <el-form-item label="ID">
+                        <el-input v-model="userConditions.userId" placeholder="用户ID" type="number" style="width:100px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="姓名">
+                        <el-input v-model="userConditions.userName" placeholder="用户姓名" style="width:90px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱">
+                        <el-input v-model="userConditions.userEmail" placeholder="用户邮箱" ></el-input>
+                    </el-form-item>
+                    <el-form-item label="内部号">
+                        <el-input v-model="userConditions.userNumber" placeholder="用户内部号" type="number" style="width:180px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号">
+                        <el-input v-model="userConditions.userPhoneNumber" placeholder="用户手机号" type="number" style="width:120px"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="selectByConditions()">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="getUserData()">所有用户</el-button>
+                    </el-form-item>
+                </el-form>
+
+                <el-table :data="tableData" height = "720" @selection-change="userTableSelectionChange">
+                    <el-table-column prop="checkBox" type="selection" width="60">
+                    </el-table-column>
+                    <el-table-column prop="userId" label="ID" width="140">
+                    </el-table-column>
+                    <el-table-column prop="userName" label="姓名" width="120">
+                    </el-table-column>
+                    <el-table-column prop="userNumber" label="内部号" width="200">
+                    </el-table-column>
+                    <el-table-column prop="userEmail" label="邮箱" width="250">
+                    </el-table-column>
+                    <el-table-column prop="userPhoneNumber" label="手机号" width="200">
+                    </el-table-column>
+                    <el-table-column prop="" label="管理员权限" width="150">
+                        <template slot-scope="scope">
+                            <el-tag v-show="scope.row.isAdmin == '1'">管理员</el-tag>
+                            <el-tag v-show="scope.row.isAdmin == '0'">普通用户</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="" label="操作" width="200" fixed="right">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="getEditUserInfo(scope.$index, scope.row);editUserDialogFormVisible = true">编辑</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="deleteUser(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+
+                <el-dialog title="修改用户" :visible.sync="editUserDialogFormVisible">
+                    <el-form :model="editUserInfo">
+                        <el-form-item label="姓名" :label-width="formLabelWidth">
+                            <el-input v-model="editUserInfo.userName" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="内部号" :label-width="formLabelWidth">
+                            <el-input v-model="editUserInfo.userNumber" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="手机号" :label-width="formLabelWidth">
+                            <el-input v-model="editUserInfo.userPhoneNumber" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="密码" :label-width="formLabelWidth">
+                            <el-input v-model="editUserInfo.userPassword"  type="password" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="邮箱" :label-width="formLabelWidth">
+                            <el-input v-model="editUserInfo.userEmail" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="管理员权限" :label-width="formLabelWidth">
+                            <el-radio-group v-model="editUserInfo.isAdmin">
+                                <el-radio label="1">管理员</el-radio>
+                                <el-radio label="0">普通用户</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="editUserDialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary"  @click="editUserDialogFormVisible = false;editUser()" >确 定</el-button>
+                    </div>
+                </el-dialog>
+            </el-main>
+
+            <el-main v-show="index == '2-2' ">
+                <div id="registerUsers" title="批量注册">
+                    <h2>批量注册</h2>
+                    <article>提示：本功能用作管理员使用内部号批量注册。只需要输入姓名和内部号，密码可选择：1.默认为123456；2.默认为内部号后六位；3.自定义默认密码。</article>
+
+                </div>
+            </el-main>
+            
+            <el-main v-show="index == '3-1'">
+                <input type="button" class="edit" id="addRoom" value = "添加会议室" @click="addRoomDialogFormVisible = true">
+                <el-dialog title="添加会议室" :visible.sync="addRoomDialogFormVisible">
+                    <el-form :model="addRoomInfo">
+                        <el-form-item label="会议室尺寸" :label-width="formLabelWidth">
+                            <el-input v-model="addRoomInfo.roomSize" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="会议室开启时间" :label-width="formLabelWidth">
+                            <el-time-picker v-model="addRoomInfo.roomOpenTime" :picker-options="{selectableRange: '6:00:00 - 23:00:00'}" value-format="HH:mm" placeholder="范围:6:00-23:00">
+                            </el-time-picker>
+                        </el-form-item>
+                        <el-form-item label="会议室关闭时间" :label-width="formLabelWidth">
+                            <el-time-picker v-model="addRoomInfo.roomCloseTime" :picker-options="{selectableRange: '6:00:00 - 23:00:00'}" value-format="HH:mm" placeholder="范围:6:00-23:00">
+                            </el-time-picker>
+                        </el-form-item>
+                        <el-form-item label="会议室门牌号" :label-width="formLabelWidth">
+                            <el-input v-model="addRoomInfo.roomNumber" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="会议室地址" :label-width="formLabelWidth">
+                            <el-input v-model="addRoomInfo.roomAddress" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="addRoomDialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary"  @click="addRoomDialogFormVisible = false;addRoom()" >确 定</el-button>
+                    </div>
+                </el-dialog>
+
+                <input type="button" class="dangerous" id="deleteRooms" value = "批量删除会议室" @click="deleteRoomDialogFormVisible = true">
+
+                <el-dialog title="批量删除会议室" :visible.sync="deleteRoomDialogFormVisible">
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="deleteRoomDialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary"  @click="deleteRoomDialogFormVisible = false;deleteRooms()" >确 定</el-button>
+                    </div>
+                </el-dialog>
+                <el-divider></el-divider>
+                <el-form :inline="true" :model="roomConditions" size="mini">
+                    <el-form-item label="ID">
+                        <el-input v-model="roomConditions.roomId" placeholder="会议室ID" type="number" style="width:100px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="尺寸">
+                        <el-input v-model="roomConditions.roomSize" placeholder="会议室尺寸" type=“number” style="width:90px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="开启时间">
+                        <el-input v-model="roomConditions.roomOpenTime" placeholder="会议室开启时间" type="time" style="width: 100px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="关闭时间">
+                        <el-input v-model="roomConditions.roomCloseTime" placeholder="会议室关闭时间" type="time" style="width:100px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="门牌号">
+                        <el-input v-model="roomConditions.roomNumber" placeholder="会议室门牌号" type="number" style="width:120px"></el-input>
+                    </el-form-item>
+                </el-form>
+                <el-form :inline="true" :model="roomConditions" size="mini">
+                    <el-form-item label="地址">
+                        <el-input v-model="roomConditions.roomAddress" placeholder="会议室地址" style="width:750px"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="selectRoomByConditions()">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="getRoomData()">所有会议室</el-button>
+                    </el-form-item>
+                </el-form>
+
+                <el-table :data="roomData" height = "720" @selection-change="roomTableSelectionChange">
+                    <el-table-column prop="checkBox" type="selection" width="60">
+                    </el-table-column>
+                    <el-table-column prop="roomId" label="ID" width="140">
+                    </el-table-column>
+                    <el-table-column prop="roomSize" label="尺寸" width="140">
+                    </el-table-column>
+                    <el-table-column prop="roomOpenTime" label="开启时间" width="200">
+                    </el-table-column>
+                    <el-table-column prop="roomCloseTime" label="关闭时间" width="200">
+                    </el-table-column>
+                    <el-table-column prop="roomNumber" label="门牌号" width="140">
+                    </el-table-column>
+                    <el-table-column prop="" label="操作" width="300" fixed="right">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="showRoomAddress(scope.$index, scope.row)" >查看地址</el-button>
+                            <el-button
+                                    size="mini"
+                                    @click="getEditRoomInfo(scope.$index, scope.row);editRoomDialogFormVisible = true">编辑</el-button>
+                            <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="deleteRoom(scope.$index, scope.row)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+
+                <el-dialog title="修改会议室" :visible.sync="editRoomDialogFormVisible">
+                    <el-form :model="editRoomInfo">
+                        <el-form-item label="尺寸" :label-width="formLabelWidth">
+                            <el-input v-model="editRoomInfo.roomSize" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="开启时间" :label-width="formLabelWidth">
+                            <el-time-picker v-model="editRoomInfo.roomOpenTime" :picker-options="{selectableRange: '6:00:00 - 23:00:00'}" value-format="HH:mm" placeholder="范围:6:00-23:00">
+                            </el-time-picker>
+                        </el-form-item>
+                        <el-form-item label="关闭时间" :label-width="formLabelWidth">
+                            <el-time-picker v-model="editRoomInfo.roomCloseTime" :picker-options="{selectableRange: '6:00:00 - 23:00:00'}" value-format="HH:mm" placeholder="范围:6:00-23:00">
+                            </el-time-picker>
+                        </el-form-item>
+                        <el-form-item label="门牌号" :label-width="formLabelWidth">
+                            <el-input v-model="editRoomInfo.roomNumber"  autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="地址" :label-width="formLabelWidth">
+                            <el-input v-model="editRoomInfo.roomAddress" autocomplete="off"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="editRoomDialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary"  @click="editRoomDialogFormVisible = false;editRoom()" >确 定</el-button>
+                    </div>
+                </el-dialog>
+            </el-main>
+
+        </el-container>
+    </el-container>
+</div>
+
+<script>
+    new Vue({
+        el:"#app",
+        data() {
+            return {
+
+                oldPsw:'',
+                newPsw:'',
+                repNewPsw:'',
+                index:"0-1",
+                Err:{},
+                currentUser:{},
+                tableData: [],
+                updateDialogFormVisible: false,
+                addUserDialogFormVisible: false,
+                deleteUserDialogFormVisible: false,
+                editUserDialogFormVisible: false,
+                curUserUpdateInfo:{},
+                formLabelWidth: '120px',
+                addUserInfo:{},
+                editUserInfo:{},
+                selectedUsers: [],
+                selectedUserIds: [],
+                userConditions:{},
+
+                editRoomDialogFormVisible: false,
+                addRoomDialogFormVisible: false,
+                deleteRoomDialogFormVisible: false,
+                addRoomInfo: {},
+                editRoomInfo: {},
+                roomData: [],
+                roomConditions: {},
+                selectedRooms: [],
+                selectedRoomIds: [],
+
+            }
+       },
+       mounted(){
+           let _this = this;
+
+           _this.getUserData();
+           _this.getRoomData();
+
+           axios({
+               method:"get",
+               url:"http://localhost:80/users/getSessionUser"
+           }).then(function(resp){
+               _this.currentUser = resp.data;
+               _this.curUserUpdateInfo = Object.assign({},resp.data);
+
+           })
+
+       },
+       methods:{
+           userTableSelectionChange(val){
+               this.selectedUsers = val;
+               console.log(val);
+           },
+           addUser(){
+               this.$confirm('确定要添加该用户吗?', '提示', {
+                   confirmButtonText: '确定',
+                   cancelButtonText: '取消',
+               }).then(() => {
+                   var _this = this;
+                   //发送异步请求
+                   axios({
+                       method:'post',
+                       url:'http://localhost:80/users/addUSer',
+                       data:_this.addUserInfo
+                   }).then(function(resp){
+                       if(resp.data == "fail"){
+                           _this.$message({
+                               type: 'error',
+                               message: '添加失败!'
+                           });
+                       }else if(resp.data == "empty"){
+                           _this.$message({
+                               type: 'warning',
+                               message: '请输入信息!'
+                           });
+                       }else{
+                           _this.$message({
+                               type: 'success',
+                               message: '添加成功!新添加的用户的ID为：'+resp.data
+                           });
+                           _this.getUserData();
+                           _this.addUserInfo = Object.assign({},{});
+                       }
+                   })
+               })
+           },
+
+           deleteUser(index,row){
+
+               this.$confirm('确定要删除当前用户吗？','提示',{
+                   confirmButtonText:'确定',
+                   cancelButtonText:'取消',
+               }).then(() => {
+                   let _this = this;
+                   axios({
+                       method:'get',
+                       url:'http://localhost:80/users/deleteUser?userId='+row.userId+'&curUserId='+_this.currentUser.userId,
+
+                   }).then(function(resp){
+                       if(resp.data == "success"){
+                           _this.$message({
+                               type: 'success',
+                               message: '成功删除ID为'+row.userId+'的用户！',
+                           });
+                           _this.getUserData();
+                       }else if(resp.data == "mistake"){
+                           _this.$message({
+                               type: 'warning',
+                               message: '您不能自己删除自己！',
+                           });
+                           return;
+                       }else{
+                           _this.$message({
+                               type: 'error',
+                               message: '删除失败！',
+                           });
+                       }
+                   })
+
+
+               })
+           },
+
+           deleteUsers(){
+               this.$confirm('确定要删除当前所有选中的用户吗？','提示',{
+                   confirmButtonText:'确定',
+                   cancelButtonText:'取消',
+               }).then(() => {
+                   if(this.selectedUsers.length == 0){
+                       this.$message({
+                           type: 'warning',
+                           message: '请选择用户！',
+                       });
+                       return;
+                   }
+                   for(let i = 0;i<this.selectedUsers.length;i++){
+                       if(this.selectedUsers[i].userId == this.currentUser.userId){
+                           this.$message({
+                               type: 'warning',
+                               message: '您不能自己删除自己！',
+                           });
+                           return;
+                       };
+                       this.selectedUserIds[i] = this.selectedUsers[i].userId;
+                   }
+                   let _this = this;
+                   axios({
+                       method:'post',
+                       url:"http://localhost:80/users/deleteUsers",
+                       data: _this.selectedUserIds
+                   }).then(function(resp){
+                       if(resp.data = "success"){
+                           _this.$message({
+                               type: 'success',
+                               message: '批量删除成功！',
+                           });
+                           _this.getUserData();
+                       }
+                   })
+               })
+           },
+
+           getEditUserInfo(index,row){
+               this.editUserInfo=Object.assign({},row);
+           },
+
+           editUser(){
+               let _this = this;
+               axios({
+                   method:'post',
+                   url:'http://localhost:80/users/editUser',
+                   data:_this.editUserInfo,
+               }).then(function(resp){
+                   if(resp.data == "success"){
+                       _this.$message({
+                            type: 'success',
+                            message: '修改成功!'
+                       });
+                       _this.getRoomData();
+
+                   }else if(resp.data == "repeated"){
+                       _this.$message({
+                            type: 'error',
+                            message: '修改失败!'
+                       });
+
+                   }else if(resp.data == "empty"){
+                       _this.$message({
+                            type: 'warning',
+                            message: '请输入信息!'
+                       });
+                   }
+               })
+           },
+
+           getUserData(){
+               var _this = this;
+               axios({
+                   method:"get",
+                   url:"http://localhost:80/users/selectAll",
+
+               }).then(function(resp){
+                   _this.tableData=resp.data;
+               });
+
+           },
+
+           editCurUserInfo(){
+               this.$confirm('确定要更改信息吗?', '提示', {
+                   confirmButtonText: '确定',
+                   cancelButtonText: '取消',
+               }).then(() => {
+                   let _this = this;
+                   //发送异步请求
+                   axios({
+                       method:'post',
+                       url:'http://localhost:80/users/editUser',
+                       data:_this.curUserUpdateInfo
+                   }).then(function(resp){
+                       if(resp.data == "success"){
+                           _this.$message({
+                               type: 'success',
+                               message: '修改成功!'
+                           });
+                           _this.currentUser = Object.assign({},_this.curUserUpdateInfo);
+
+                       }else if(resp.data == "fail"){
+                           _this.$message({
+                               type: 'info',
+                               message: '修改失败!'
+                           });
+
+                       }else if(resp.data == "empty"){
+                           _this.$message({
+                               type: 'info',
+                               message: '请输入信息!'
+                           });
+                       }
+                   })
+               })
+           },
+           updatePsw(){
+               if(this.Err.oldPswErr == 1||this.Err.newPswErr == 1||this.Err.repNewPswErr == 1||this.oldPsw==''||this.newPsw==''||this.repNewPsw==''){
+                   alert("请检查输入！");
+                   return ;
+               }
+               this.$confirm('确定要更改密码吗?', '提示', {
+                   confirmButtonText: '确定',
+                   cancelButtonText: '取消',
+               }).then(() => {
+                   var _this = this;
+                   //临时存储信息的对象
+                   var info = Object.assign({},_this.currentUser);
+                   info.userPassword = _this.newPsw;
+                   //发送异步请求
+                   axios({
+                       method:'post',
+                       url:'http://localhost:80/users/editUser',
+                       data:info
+                   }).then(function(resp){
+                       if(resp.data == "success"){
+                           _this.$message({
+                               type: 'success',
+                               message: '修改成功!'
+                           });
+                           _this.currentUser = Object.assign({},info);
+                           _this.oldPsw = "";
+                           _this.newPsw = "";
+                           _this.repNewPsw = "";
+
+                       }else if(resp.data == "empty"){
+                           _this.$message({
+                               type: 'info',
+                               message: '请输入信息!'
+                           });
+
+                       }else{
+                           _this.$message({
+                               type: 'info',
+                               message: '修改失败!'
+                           });
+                       }
+                   });
+               });
+           },
+           checkOld(){
+               let flag = (this.oldPsw == this.currentUser.userPassword);
+               if (flag) {
+                   this.Err.oldPswErr = "0";
+               }else{
+                   this.Err.oldPswErr = "1";
+               }
+           },
+           checkNew(){
+               let reg = /^\w{6,20}$/;
+               let flag = reg.test(this.newPsw);
+               if (flag) {
+                   this.Err.newPswErr = "0";
+               }else{
+                   this.Err.newPswErr = "1";
+               }
+
+           },
+           checkRepNew(){
+               let flag = (this.newPsw == this.repNewPsw);
+               if(flag){
+                   this.Err.repNewPswErr = "0";
+               }else{
+                   this.Err.repNewPswErr = "1";
+               }
+           },
+
+           selectByConditions(){
+               var _this = this;
+               axios({
+                   method:'post',
+                   url:'http://localhost:80/users/select',
+                   data:_this.userConditions,
+               }).then(function(resp){
+                   if(resp.data == "empty"){
+                       alert("您没有输入条件！");
+                       _this.getUserdata();
+
+                   }else if(resp.data == "notFound"){
+                       alert("不好意思，没有符合条件的用户哦！")
+                       _this.getUserdata();
+
+                   }else{
+                       _this.tableData = resp.data;
+                   }
+
+               })
+
+           },
+
+           //todo
+           addRoom(){
+               this.$confirm('确定要添加该会议室吗?', '提示', {
+                   confirmButtonText: '确定',
+                   cancelButtonText: '取消',
+               }).then(() => {
+                   let _this = this;
+                   //发送异步请求
+                   axios({
+                       method:'post',
+                       url:'http://localhost:80/rooms/addRoom',
+                       data:_this.addRoomInfo
+                   }).then(function(resp){
+                       if(resp.data == "repeated"){
+                           _this.$message({
+                               type: 'error',
+                               message: '添加失败!'
+                           });
+                       }else if(resp.data == "empty"){
+                           _this.$message({
+                               type: 'warning',
+                               message: '请输入信息!'
+                           });
+                       }else{
+                           _this.$message({
+                               type: 'success',
+                               message: '添加成功!新添加的会议室的ID为：'+resp.data
+                           });
+                           _this.getRoomData();
+                           _this.addRoomInfo = Object.assign({},{});
+                       }
+                   })
+               })
+           },
+
+           deleteRoom(index,row){
+               this.$confirm('确定要删除当前会议室吗？','提示',{
+                   confirmButtonText:'确定',
+                   cancelButtonText:'取消',
+               }).then(() => {
+                   let _this = this;
+                   axios({
+                       method:'get',
+                       url:'http://localhost:80/rooms/'+row.roomId,
+
+                   }).then(function(resp){
+                       if(resp.data == "success"){
+                           _this.$message({
+                               type: 'success',
+                               message: '成功删除ID为'+row.roomId+'的会议室！',
+                           });
+                           _this.getRoomData();
+                       }else{
+                           _this.$message({
+                               type: 'error',
+                               message: '删除失败！',
+                           });
+                       }
+                   })
+               })
+           },
+
+           selectRoomByConditions(){
+               let _this = this;
+               axios({
+                   method:'post',
+                   url:'http://localhost:80/rooms/select',
+                   data:_this.roomConditions,
+               }).then(function(resp){
+                   if(resp.data == "empty"){
+                       _this.$message({
+                           type: 'warning',
+                           message: '请输入查询条件！',
+                       });
+                       _this.getRoomData();
+
+                   }else if(resp.data == "notFound"){
+                       _this.$message({
+                           type: 'fail',
+                           message: '没有找到符合条件的会议室哦！',
+                       });
+                       _this.getRoomData();
+
+                   }else{
+                       _this.$message({
+                           type: 'success',
+                           message: '成功找到'+resp.data.length+'条记录！',
+                       });
+                       _this.roomData = resp.data;
+                   }
+               })
+           },
+
+           getRoomData(){
+               let _this = this;
+               axios({
+                   method:"get",
+                   url:"http://localhost:80/rooms/selectAll",
+               }).then(function(resp){
+                   _this.roomData=resp.data;
+               });
+           },
+
+           roomTableSelectionChange(val){
+               this.selectedRooms = val;
+               console.log(val);
+           },
+
+           showRoomAddress(index,row){
+               this.$alert(row.roomAddress, '地址', {
+                   confirmButtonText: '确定',
+               });
+           },
+
+           getEditRoomInfo(index,row){
+               this.editRoomInfo=Object.assign({},row);
+           },
+
+           deleteRooms(){
+               this.$confirm('确定要删除当前所有选中的会议室吗？','提示',{
+                   confirmButtonText:'确定',
+                   cancelButtonText:'取消',
+               }).then(() => {
+                   if(this.selectedRooms.length == 0){
+                       this.$message({
+                           type: 'warning',
+                           message: '请选择会议室！',
+                       });
+                       return;
+                   }
+                   for(let i = 0;i<this.selectedRooms.length;i++){
+                       this.selectedRoomIds[i] = this.selectedRooms[i].roomId;
+                   }
+
+                   let _this = this;
+                   axios({
+                       method:'post',
+                       url:"http://localhost:80/rooms/deleteRooms",
+                       data: _this.selectedRoomsIds
+                   }).then(function(resp){
+                       if(resp.data = "success"){
+                           _this.$message({
+                               type: 'success',
+                               message: '批量删除成功！',
+                           });
+                           _this.getRoomData();
+                       }
+                   })
+               })
+
+
+
+           },
+
+           editRoom(){
+               let _this = this;
+               axios({
+                   method:'post',
+                   url:'http://localhost:80/editRoomServlet',
+                   data:_this.editRoomInfo,
+               }).then(function(resp){
+                   if(resp.data == "success"){
+                       _this.$message({
+                           type: 'success',
+                           message: '修改成功!'
+                       });
+                       _this.getRoomData();
+
+                   }else if(resp.data == "repeated"){
+                       _this.$message({
+                           type: 'error',
+                           message: '修改失败!'
+                       });
+
+                   }else if(resp.data == "empty"){
+                       _this.$message({
+                           type: 'warning',
+                           message: '请输入信息!'
+                       });
+                   }
+               })
+
+
+           },
+
+       }
+    })
+
+</script>
+</body>
+</html>

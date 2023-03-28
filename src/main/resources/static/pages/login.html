@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/element-ui/lib/index.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <link rel="stylesheet" type="text/css"  href="index.css">
+
+    <style>
+    .el-header, .el-footer {
+        background-color: rgba(242,242,242,0.8);
+        color: #333;
+        line-height: 50px;
+    }
+
+    .el-main {
+        background-color: rgba(242,242,242,0.8);
+        color: #333;
+        text-align: center;
+        line-height: 15px;
+    }
+    #backgroundBox {
+        background-color:rgba(137,183,250,0.5);
+        height: 700px;
+        border-radius:10px;
+
+    }
+    #loginBox{
+        background-color:rgba(237,237,237,0.95);
+        width:400px;
+        height:500px;
+        border-radius:10px;
+        position:relative;
+        left:630px;
+        top:75px;
+    }
+    .inputBox{
+        background-color:rgba(255,255,255,0.7);
+        border:1px;
+        border-radius:5px;
+        height:30px;
+        width:250px;
+
+    }
+    h1{
+        font-size: 40px;
+        font-weight: bold;
+
+    }
+    .err_msg{
+        position:relative;
+        left:-30px;
+        top:-32px;
+        font-size:13px;
+        font-weight:bold;
+        color:rgba(194, 75, 11, 0.82);
+    }
+    #button{
+        transition-duration:0.2s;
+        border:1px;
+        border-radius:5px;
+        background-color:rgba(137,183,250,0.7);
+        font-size:18px;
+        fount-weight:bold;
+        height:40px;
+        width:100px;
+    }
+    #button:hover{
+        background-color:rgba(90,132,193,1);
+    }
+    #title1{
+        font-size: 120px;
+        font-weight: bold;
+        position:relative;
+        top:220px;
+        opacity:0.7;
+    }
+    #loginFail{
+        font-weight:bold;
+        color:rgba(194, 75, 11, 0.82);
+    }
+
+
+    </style>
+</head>
+
+<body>
+<div id="app">
+    <el-container>
+        <el-header><h2>智能会议室管理系统</h2></el-header>
+        <el-main>
+            <div id="backgroundBox">
+                <div id="title1">智能会议室管理系统</div>
+                <div id="loginBox">
+                    <form>
+                        <br>
+                        <p><h1>登录</h1><br>
+                        <p><div id="loginFail" v-show="loginFail=='1'">登录失败，请检查邮箱和密码！</div></p><br>
+                        <p>邮箱：<input class="inputBox" type="email" name="userEmail" v-model="userLoginData.userEmail" @input="check()"/></p><br>
+                        <p><div class="err_msg" id="email_err" v-show="emailErr=='1'">请检查邮箱输入格式！</div>
+                        <p>密码：<input class="inputBox" type="password" name="userPassword" v-model="userLoginData.userPassword"/></p><br>
+                        <p><input type="button" id="button" value="登录" @click="submit()" ></p>
+                        <p><a href="register.html">还没有账号？点击注册</a></p>
+                    </form>
+                </div>
+
+            </div>
+        </el-main>
+        <el-footer></el-footer>
+    </el-container>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data(){
+            return{
+                loginFail:"0",
+                emailErr:"0",
+                userLoginData:{}
+            }
+        },
+        // mounted() {
+        //     this.submit();
+        // },
+
+        methods:{
+            //验证邮箱格式
+            check(){
+                var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                let flag = reg.test(this.userLoginData.userEmail);
+                if (!flag) {
+                    this.emailErr = 1;
+                }else{
+                    this.emailErr = 0;
+                }
+
+            },
+            submit(){
+                let _this=this;
+                axios({
+                    method:"post",
+                    url:"http://localhost/users/loginByEmail",
+                    data:_this.userLoginData
+                }).then(function(resp){
+                    if(resp.data == "admin"){
+                        location.href = "adminhome.html";
+                    }else if(resp.data == "normal"){
+                        location.href = "normalhome.html";
+                    }else if(resp.data == "fail"){
+                        _this.loginFail = 1;
+                    }
+                })
+            }
+        }
+    })
+
+
+
+</script>
+
+</body>
+</html>
