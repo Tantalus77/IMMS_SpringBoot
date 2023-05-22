@@ -1,26 +1,18 @@
 package imms.model;
 
 public class Reserve {
-    private int reserveId;
-    private int roomId;
-    private int userId;
-    private int reserveStart;
-    private int reserveEnd;
+    private Integer reserveId;
+    private  int userId;
+    private  int roomId;
+    private Integer meetingId;
+    private Integer status;
 
-    public int getReserveId() {
+    public Integer getReserveId() {
         return reserveId;
     }
 
-    public void setReserveId(int reserveId) {
+    public void setReserveId(Integer reserveId) {
         this.reserveId = reserveId;
-    }
-
-    public int getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
     }
 
     public int getUserId() {
@@ -31,32 +23,38 @@ public class Reserve {
         this.userId = userId;
     }
 
-    public int getReserveStart() {
-        return reserveStart;
+    public int getRoomId() {
+        return roomId;
     }
 
-    public void setReserveStart(int reserveStart) {
-        this.reserveStart = reserveStart;
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
-    public int getReserveEnd() {
-        return reserveEnd;
+    public Integer getMeetingId() {
+        return meetingId;
     }
 
-    public void setReserveEnd(int reserveEnd) {
-        this.reserveEnd = reserveEnd;
+    public void setMeetingId(Integer meetingId) {
+        this.meetingId = meetingId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "Reserve{" +
                 "reserveId=" + reserveId +
-                ", roomId=" + roomId +
                 ", userId=" + userId +
-                ", reserveStart=" + reserveStart +
-                ", reserveEnd=" + reserveEnd +
+                ", roomId=" + roomId +
+                ", meetingId=" + meetingId +
+                ", status=" + status +
                 '}';
     }
-
-
 }

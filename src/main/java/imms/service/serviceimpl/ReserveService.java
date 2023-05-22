@@ -1,6 +1,6 @@
 package imms.service.serviceimpl;
 
-import imms.dao.ReserveRoomMapper;
+import imms.dao.ReserveMapper;
 import imms.model.Room;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -57,9 +57,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        Room room = reserveRoomMapper.selectReservedMeetingRoomById(roomId);
+        Room room = reserveMapper.selectReservedMeetingRoomById(roomId);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -77,9 +77,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.selectReservedMeetingRoomBySize(roomSize);
+        List<Room> rooms = reserveMapper.selectReservedMeetingRoomBySize(roomSize);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -97,9 +97,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.selectReservedMeetingRoomByNumber(roomNumber);
+        List<Room> rooms = reserveMapper.selectReservedMeetingRoomByNumber(roomNumber);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -117,9 +117,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.selectReservedMeetingRoomByAddress(roomAddress);
+        List<Room> rooms = reserveMapper.selectReservedMeetingRoomByAddress(roomAddress);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -139,9 +139,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.selectReservedMeetingRoom(room);
+        List<Room> rooms = reserveMapper.selectReservedMeetingRoom(room);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -163,9 +163,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        Room room = reserveRoomMapper.selectAvailableMeetingRoomById(roomId);
+        Room room = reserveMapper.selectAvailableMeetingRoomById(roomId);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -183,9 +183,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.selectAvailableMeetingRoomBySize(roomSize);
+        List<Room> rooms = reserveMapper.selectAvailableMeetingRoomBySize(roomSize);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -203,9 +203,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.selectAvailableMeetingRoomByNumber(roomNumber);
+        List<Room> rooms = reserveMapper.selectAvailableMeetingRoomByNumber(roomNumber);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -223,9 +223,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.selectAvailableMeetingRoomByAddress(roomAddress);
+        List<Room> rooms = reserveMapper.selectAvailableMeetingRoomByAddress(roomAddress);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -245,9 +245,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.selectAvailableMeetingRoom(room);
+        List<Room> rooms = reserveMapper.selectAvailableMeetingRoom(room);
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -265,9 +265,9 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        boolean flag = !reserveRoomMapper.hasMeetingRoom(room).isEmpty();
+        boolean flag = !reserveMapper.hasMeetingRoom(room).isEmpty();
         //提交事务
         sqlSession.commit();
         //释放资源
@@ -284,14 +284,14 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.hasMeetingRoom(room);
+        List<Room> rooms = reserveMapper.hasMeetingRoom(room);
         System.out.println("hasMeetingRoom方法查到的会议室"+rooms);
         if(rooms.isEmpty()){
             System.out.println("没有查找到会议室");
         }else{
-            reserveRoomMapper.updateMeetingRoomIsReserved(room);
+            reserveMapper.updateMeetingRoomIsReserved(room);
         }
 
         //提交事务
@@ -311,14 +311,14 @@ public class ReserveService {
         //获取执行对象
         SqlSession sqlSession = sqlSessionFactory.openSession();
         //获取接口代理对象
-        ReserveRoomMapper reserveRoomMapper = sqlSession.getMapper(ReserveRoomMapper.class);
+        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
         //执行
-        List<Room> rooms = reserveRoomMapper.hasMeetingRoom(room);
+        List<Room> rooms = reserveMapper.hasMeetingRoom(room);
         System.out.println("hasMeetingRoom方法查到的会议室"+rooms);
         if(rooms.isEmpty()){
             System.out.println("没有查找到会议室");
         }else{
-            reserveRoomMapper.updateMeetingRoomIsAvailable(room);
+            reserveMapper.updateMeetingRoomIsAvailable(room);
         }
 
         //提交事务
