@@ -1,18 +1,24 @@
 package imms.service.serviceimpl;
 
 import imms.dao.ReserveMapper;
+import imms.dao.RoomMapper;
+import imms.model.Reserve;
 import imms.model.Room;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.util.List;
 
+@Service
 public class ReserveService {
     private static SqlSessionFactory sqlSessionFactory = null;
-
+    @Autowired
+    private ReserveMapper reserveMapper;
     //初始化sqlSessionFactory
     static{
         try {
@@ -25,309 +31,109 @@ public class ReserveService {
         }
     }
 
-        /*
-    对会议室的预约的功能中，包含以下功能
-       1.查询已被预约的房间：
-            1.1. 通过会议室id查询；
-            1.2. 通过会议室尺寸查询；
-            1.3. 通过会议室门牌号查询；
-            1.4. 通过会议室地址查询；
-            1.5. 查询所有会议室
-        2.查询没有被预约的房间：
-            2.1. 通过会议室id查询；
-            2.2. 通过会议室尺寸查询；
-            2.3. 通过会议室门牌号查询；
-            2.4. 通过会议室地址查询；
-            2.5. 查询所有会议室
-        3.是否已存在会议室
-        4.修改会议室为已经被预约
-        5.修改会议室为没有被预约
-     */
-
     /**
-     * 以下为查询已经被预约的会议室的各种方法
-     */
+     * 功能:
+     * 1.增加一条预约
+     * 2.删除一条预约
+     * 3.修改某条预约的信息
+     * 4.查询数据库中所有的预约
+     * 5.通过不确定的条件查询预约
+     * 6.查询某个用户的全部预约
+     * 7.查询某个房间的全部预约
+     * 8.查询某个会议的所有预约
+     * 9.通过预约状态查询预约
+     * 10.管理员审核通过某个预约，成功返回true，失败返回false
+     * 11.管理员驳回某个预约，成功返回true，失败返回false
+    * */
 
-    /**
-     * 1.1.通过ID查找已经被预约的会议室
-     * @param roomId 要查找的会议室的id
-     * @return 查找到的room（唯一）
-     */
-    public Room selectReservedMeetingRoomById(int roomId){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        Room room = reserveMapper.selectReservedMeetingRoomById(roomId);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return room;
-    }
-
-    /**
-     * 1.2.通过会议室尺寸找已被预约的会议室
-     * @param roomSize 要查找的会议室的尺寸
-     * @return rooms 查找到的会议室们
-     */
-    public List<Room> selectReservedMeetingRoomBySize(int roomSize){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.selectReservedMeetingRoomBySize(roomSize);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return rooms;
-    }
-
-    /**
-     * 1.3.通过会议室门牌号查找已经被预约的会议室
-     * @param roomNumber 要查找的会议室的门牌号
-     * @return 查找到的会议室们
-     */
-    public List<Room> selectReservedMeetingRoomByNumber(int roomNumber){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.selectReservedMeetingRoomByNumber(roomNumber);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return rooms;
-    }
-
-    /**
-     * 1.4.通过房间地址查找已经被预约的会议室（模糊查询）
-     * @param roomAddress 要查找的会议室的地址
-     * @return 查找到的会议室们
-     */
-    public List<Room> selectReservedMeetingRoomByAddress(String roomAddress){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.selectReservedMeetingRoomByAddress(roomAddress);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return rooms;
-    }
-
-    /**
-     * 1.5.动态查找已经被预约的会议室。对房间门牌号、房间地址为模糊查询；
-     * 其中roomOpenTime和roomCloseTime携带的是会议开启时间和会议结束时间，
-     * 即只要用户查找的时间在开启时间和关闭时间之间，就可以找到对应的会议室。
-     * @param room 一个携带要查找的会议室信息的会议室对象
-     * @return 查找到的会议室们
-     */
-    public List<Room> selectRoom(Room room){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.selectReservedMeetingRoom(room);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return rooms;
-    }
-
-    /**
-     * 以下为查询没有被预约的会议室的各种方法
-     */
-
-    /**
-     * 2.1.通过ID查找没有被预约的会议室
-     * @param roomId 要查找的会议室的id
-     * @return 查找到的room（唯一）
-     */
-    public Room selectAvailableMeetingRoomById(int roomId){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        Room room = reserveMapper.selectAvailableMeetingRoomById(roomId);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return room;
-    }
-
-    /**
-     * 2.2.通过会议室尺寸找没有被预约的会议室
-     * @param roomSize 要查找的会议室的尺寸
-     * @return rooms 查找到的会议室们
-     */
-    public List<Room> selectAvailableMeetingRoomBySize(int roomSize){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.selectAvailableMeetingRoomBySize(roomSize);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return rooms;
-    }
-
-    /**
-     * 2.3.通过会议室门牌号查找没有经被预约的会议室
-     * @param roomNumber 要查找的会议室的门牌号
-     * @return 查找到的会议室们
-     */
-    public List<Room> selectAvailableMeetingRoomByNumber(int roomNumber){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.selectAvailableMeetingRoomByNumber(roomNumber);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return rooms;
-    }
-
-    /**
-     * 2.4.通过房间地址查找没有被预约的会议室（模糊查询）
-     * @param roomAddress 要查找的会议室的地址
-     * @return 查找到的会议室们
-     */
-    public List<Room> selectAvailableMeetingRoomByAddress(String roomAddress){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.selectAvailableMeetingRoomByAddress(roomAddress);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return rooms;
-    }
-
-    /**
-     * 2.5.动态查找没有被预约的会议室。对房间门牌号、房间地址为模糊查询；
-     * 其中roomOpenTime和roomCloseTime携带的是会议开启时间和会议结束时间，
-     * 即只要用户查找的时间在开启时间和关闭时间之间，就可以找到对应的会议室。
-     * @param room 一个携带要查找的会议室信息的会议室对象
-     * @return 查找到的会议室们
-     */
-    public List<Room> selectAvailableMeetingRoom(Room room){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.selectAvailableMeetingRoom(room);
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return rooms;
-    }
-
-    /**
-     * 3.是否已存在会议室，通过门牌号和地址确定。
-     * @param room 要检查的会议室对象
-     * @return 是否存在
-     */
-    public boolean hasMeetingRoom(Room room){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        boolean flag = !reserveMapper.hasMeetingRoom(room).isEmpty();
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return flag;
-    }
-
-    /**
-     * 4.修改会议室为已被预约
-     * @param room 修改后的会议室
-     */
-    public boolean updateMeetingRoomIsReserved(Room room){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.hasMeetingRoom(room);
-        System.out.println("hasMeetingRoom方法查到的会议室"+rooms);
-        if(rooms.isEmpty()){
-            System.out.println("没有查找到会议室");
-        }else{
-            reserveMapper.updateMeetingRoomIsReserved(room);
+    //1.增加一条预约
+    public boolean addReserve(Reserve reserve){
+        try {
+            reserveMapper.addReserve(reserve);
+            return true;
+        }catch (Exception e) {
+            System.out.println("预约失败");
+            return false;
         }
-
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return true;
-
     }
 
-    /**
-     * 4.修改会议室为没有被预约
-     * @param room 修改后的会议室
-     */
-    public boolean updateMeetingRoomIsAvailable(Room room){
-        //获取执行对象
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        //获取接口代理对象
-        ReserveMapper reserveMapper = sqlSession.getMapper(ReserveMapper.class);
-        //执行
-        List<Room> rooms = reserveMapper.hasMeetingRoom(room);
-        System.out.println("hasMeetingRoom方法查到的会议室"+rooms);
-        if(rooms.isEmpty()){
-            System.out.println("没有查找到会议室");
-        }else{
-            reserveMapper.updateMeetingRoomIsAvailable(room);
+    //2.删除一条预约
+    public boolean deleteReserve(Integer reserveId){
+        try {
+            reserveMapper.deleteReserve(reserveId);
+            return true;
+        } catch (Exception e) {
+            System.out.println("删除失败");
+            return false;
         }
-
-        //提交事务
-        sqlSession.commit();
-        //释放资源
-        sqlSession.close();
-
-        return true;
-
     }
 
+    //3.修改某条预约的信息
+    public boolean updateReserveInfo(Reserve reserve) {
+        try {
+            reserveMapper.updateReserve(reserve);
+            return true;
+        } catch (Exception e) {
+            System.out.println("修改失败");
+            return false;
+        }
+    }
+
+    //4.查询数据库中所有的预约
+    public List<Reserve> selectAll(){
+        List<Reserve> reservers = reserveMapper.selectAll();
+        return reservers;
+    }
+
+    //5.通过不确定的条件查询预约
+    public List<Reserve> select(Reserve reserve){
+        List<Reserve> reserves = reserveMapper.select(reserve);
+        return reserves;
+    }
+
+    //6.查询某个用户的全部预约
+    public List<Reserve> selectByUserId(int UserId){
+        List<Reserve> reserves = reserveMapper.selectByUserId(UserId);
+        return reserves;
+    }
+
+    //7.查询某个房间的全部预约
+    public List<Reserve> selectByRoomId(int roomId){
+        List<Reserve> reserves = reserveMapper.selectByRoomId(roomId);
+        return reserves;
+    }
+
+    //8.查询某个会议的所有预约
+    public List<Reserve> selectByMeetingId(Integer meetingId) {
+        List<Reserve> reserves = reserveMapper.selectByMeetingId(meetingId);
+        return reserves;
+    }
+
+    //9.通过预约状态查询预约
+    public List<Reserve> selectByReserveStatus(Integer status) {
+        List<Reserve> reserves = reserveMapper.selectByStatus(status);
+        return reserves;
+    }
+
+    //10.管理员审核通过某个预约，成功返回true，失败返回false
+    public boolean pass(Integer reserveId) {
+        try {
+            reserveMapper.reservePass(reserveId);
+            return true;
+        }catch (Exception e) {
+            System.out.println("审核失败");
+            return false;
+        }
+    }
+
+    //11.管理员驳回某个预约，成功返回true，失败返回false
+    public boolean reject(Integer reserveId){
+        try{
+            reserveMapper.reserveReject(reserveId);
+            return true;
+        }catch (Exception e) {
+            System.out.println("审核失败");
+            return false;
+        }
+    }
 }

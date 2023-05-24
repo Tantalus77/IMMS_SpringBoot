@@ -3,6 +3,7 @@ package imms.dao;
 import imms.model.Reserve;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface ReserveMapper {
      * 7.查询某个房间的全部预约
      * 8.查询某个会议的所有预约
      * 9.通过预约状态查询预约
+     * 10.设置预约通过
+     * 11.设置预约驳回
      */
 
     //1.增加一条预约
@@ -32,7 +35,7 @@ public interface ReserveMapper {
 
     //4.查询数据库中所有的预约
     @Select("select * from reserve")
-    List<Reserve> selectAll(Reserve reserve);
+    List<Reserve> selectAll();
 
     //5.通过不确定的条件查询预约
     List<Reserve> select(Reserve reserve);
@@ -52,4 +55,12 @@ public interface ReserveMapper {
     //9.通过预约状态查询预约
     @Select("select * from reserve where status = #{status}}")
     List<Reserve> selectByStatus(Integer status);
+
+    //10.设置预约通过
+    @Update("update reserve set status = 1 where reserveId = #{reserveId}}")
+    void reservePass(Integer reserveId);
+
+    //11.设置预约驳回
+    @Update("update reserve set status = 2 where reserveId = #{reserveId}")
+    void reserveReject(Integer reserveId);
 }
