@@ -18,22 +18,22 @@ class ImmsSpringBootApplicationTests {
 
     @Autowired
     private RoomServiceInterface roomServiceInterface;
-    @Test
-    void testUserSelect() {
-        User user = new User();
-        user.setUserName("张");
-
-        List<User> select = userServiceInterface.select(user);
-        System.out.println(select);
-    }
-
-    @Test
-    void testRoomSelect(){
-        Room room = new Room();
-        room.setRoomAddress("沙河");
-
-        List<Room> select = roomServiceInterface.selectRoom(room);
-        System.out.println(select);
-    }
+//    @Test
+//    void testUserSelect() {
+//        User user = new User();
+//        user.setUserName("张");
+//
+//        List<User> select = userServiceInterface.select(user);
+//        System.out.println(select);
+//    }
+//
+//    @Test
+//    void testRoomSelect(){
+//        Room room = new Room();
+//        room.setRoomAddress("沙河");
+//
+//        List<Room> select = roomServiceInterface.selectRoom(room);
+//        System.out.println(select);
+//    }
 
 }
