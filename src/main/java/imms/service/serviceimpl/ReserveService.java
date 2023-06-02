@@ -4,6 +4,7 @@ import imms.dao.ReserveMapper;
 import imms.dao.RoomMapper;
 import imms.model.Reserve;
 import imms.model.Room;
+import imms.service.ReserveServiceInterface;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -15,21 +16,11 @@ import java.io.InputStream;
 import java.util.List;
 
 @Service
-public class ReserveService {
-    private static SqlSessionFactory sqlSessionFactory = null;
+public class ReserveService implements ReserveServiceInterface {
     @Autowired
     private ReserveMapper reserveMapper;
-    //初始化sqlSessionFactory
-    static{
-        try {
-            String resource = "mybatis-config.xml.bak";
-            InputStream inputStream = Resources.getResourceAsStream(resource);
-            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-        } catch (Exception e) {
-            System.out.println("数据库出错！");
-            e.printStackTrace();
-        }
-    }
+
+
 
     /**
      * 功能:
@@ -68,8 +59,20 @@ public class ReserveService {
         }
     }
 
+    @Override
+    public boolean deleteReserves(List<Integer> reserveIds) {
+        if(!reserveIds.isEmpty()){
+            for (Integer reserveId:
+                 reserveIds) {
+                reserveMapper.deleteReserve(reserveId);
+            }
+            return true;
+        }
+        return false;
+    }
+
     //3.修改某条预约的信息
-    public boolean updateReserveInfo(Reserve reserve) {
+    public boolean updateReserve(Reserve reserve) {
         try {
             reserveMapper.updateReserve(reserve);
             return true;

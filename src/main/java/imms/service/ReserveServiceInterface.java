@@ -13,6 +13,13 @@ public interface ReserveServiceInterface {
     public boolean addReserve(Reserve reserve);
 
     /**
+     * 更改预约信息
+     * @param reserve
+     * @return
+     */
+    public boolean updateReserve(Reserve reserve);
+
+    /**
      * 根据Id删除某个预约
      * @param reserveId
      * @return
