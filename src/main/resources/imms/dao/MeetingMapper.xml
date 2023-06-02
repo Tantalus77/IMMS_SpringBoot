@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="imms.dao.MeetingMapper">
+
+    <insert id="addMeeting" parameterType="imms.model.Meeting" keyProperty="meetingId" useGeneratedKeys="true">
+        insert into meeeting
+        values (#{meetingId},#{date},#{starTime},#{endTime},#{theme},#{introduction});
+    </insert>
+    <update id="updateMeeting" parameterType="imms.model.Meeting">
+        update meeting set
+        meetingId = #{meetingId},
+        date = #{date},
+        starTime = #{starTime},
+        endTime = #{endTime},
+        theme = #{theme},
+        introduction = #{introduction}
+        where meetingId = #{meetingId};
+    </update>
+    <delete id="deleteMeeting" parameterType="Integer">
+        delete from meeting
+        where meetingId = #{meetingId};
+    </delete>
+    <select id="select" resultType="imms.model.Meeting">
+        select * from meeting
+        <where>
+            <if test="meetingId != null &amp; meetingId != 0">
+                meetingId = #{meetingId}
+            </if>
+            <if test="date != null &amp; date != ''">
+                and date = #{date}
+            </if>
+            <if test="starTime != null &amp; starTime != ''">
+                and starTime = #{starTime}
+            </if>
+            <if test="endTime != null &amp; endTime != ''">
+                and endTime = #{endTime}
+            </if>
+            <if test="theme != null &amp; theme != ''">
+                and theme like #{theme}
+            </if>
+            <if test="introduction != null &amp; introduction != ''">
+                and introduction like #{introduction}
+            </if>
+        </where>
+    </select>
+</mapper>
