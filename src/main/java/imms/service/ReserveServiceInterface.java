@@ -53,11 +53,19 @@ public interface ReserveServiceInterface {
     public boolean pass(Integer reserveId);
 
     /**
-     * 预约审核不通过
+     * 预约审核通过，附加说明信息
+     * @param reserveId
+     * @param info
+     * @return
+     */
+    public boolean pass(Integer reserveId, String info);
+
+    /**
+     * 预约审核不通过，需要说明原因
      * @param reserveId
      * @return
      */
-    public boolean reject(Integer reserveId);
+    public boolean reject(Integer reserveId, String info);
 
     /**
      * 通过用户Id查找预约

@@ -60,7 +60,10 @@ public interface ReserveMapper {
     @Update("update reserve set status = 1 where reserveId = #{reserveId}}")
     void reservePass(Integer reserveId);
 
+    @Update("update reserve set status = 1, info = #{info} where reserveId = #{reserveId}")
+    void reservePass(Integer reserveId, String info);
+
     //11.设置预约驳回
-    @Update("update reserve set status = 2 where reserveId = #{reserveId}")
-    void reserveReject(Integer reserveId);
+    @Update("update reserve set status = 2, info = #{info} where reserveId = #{reserveId}")
+    void reserveReject(Integer reserveId,String info);
 }

@@ -29,6 +29,13 @@ public class Result {
         this.msg = msg;
     }
 
+
+    public Result(Integer code, Object data, String msg) {
+        this.code = code;
+        this.data = data;
+        this.msg = msg;
+    }
+
     @Override
     public String toString() {
         return "Result{" +

@@ -1,18 +1,11 @@
 package imms.service.serviceimpl;
 
 import imms.dao.ReserveMapper;
-import imms.dao.RoomMapper;
 import imms.model.Reserve;
-import imms.model.Room;
 import imms.service.ReserveServiceInterface;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -129,10 +122,16 @@ public class ReserveService implements ReserveServiceInterface {
         }
     }
 
+    @Override
+    public boolean pass(Integer reserveId, String info){
+        reserveMapper.reservePass(reserveId, info);
+        return true;
+    }
+
     //11.管理员驳回某个预约，成功返回true，失败返回false
-    public boolean reject(Integer reserveId){
+    public boolean reject(Integer reserveId, String info){
         try{
-            reserveMapper.reserveReject(reserveId);
+            reserveMapper.reserveReject(reserveId, info);
             return true;
         }catch (Exception e) {
             System.out.println("审核失败");
