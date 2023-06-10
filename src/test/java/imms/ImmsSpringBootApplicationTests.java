@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @SpringBootTest
@@ -35,5 +36,15 @@ class ImmsSpringBootApplicationTests {
 //        List<Room> select = roomServiceInterface.selectRoom(room);
 //        System.out.println(select);
 //    }
+
+    @Test
+    void testException(){
+        try{
+            System.out.println(userServiceInterface.selectAll());
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

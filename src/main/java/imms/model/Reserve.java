@@ -5,7 +5,7 @@ public class Reserve {
     private  int userId;
     private  int roomId;
     private Integer meetingId;
-    private Integer status;
+    private Integer status ;
 
     private String info;
 

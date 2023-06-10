@@ -124,7 +124,7 @@ public class ReserveService implements ReserveServiceInterface {
 
     @Override
     public boolean pass(Integer reserveId, String info){
-        reserveMapper.reservePass(reserveId, info);
+        reserveMapper.reservePassWithInfo(reserveId, info);
         return true;
     }
 

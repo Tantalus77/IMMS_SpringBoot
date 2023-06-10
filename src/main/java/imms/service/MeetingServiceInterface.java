@@ -85,4 +85,19 @@ public interface MeetingServiceInterface {
      */
     public boolean addParticipants(Integer meetingId, int[] userIds);
 
+    /**
+     * 签到
+     * @param meetingId
+     * @param userId
+     * @return
+     */
+    public boolean checkIn(Integer meetingId, int userId);
+
+    /**
+     * 查询签到或没签到的参会人
+     * @param meetingId
+     * @param isAttend
+     * @return
+     */
+    public boolean checkInList(Integer meetingId, int isAttend);
 }

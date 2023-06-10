@@ -7,7 +7,7 @@
 
     <insert id="addReserve" parameterType="imms.model.Reserve" keyProperty="reserveId" useGeneratedKeys="true">
         insert into reserve
-        values(#{reserveId},#{userId},#{roomId},#{meetingId},#{status});
+        values(#{reserveId},#{userId},#{roomId},#{meetingId},#{status},#{info});
     </insert>
     <update id="updateReserve" parameterType="imms.model.Reserve">
         update reserve set
@@ -15,7 +15,8 @@
         userId = #{roomId},
         roomId  = #{roomId},
         meetingId = #{meetingId},
-        status = #{status}
+        status = #{status},
+        info = #{info}
         where reserveId = #{reserveId};
     </update>
     <delete id="deleteReserve" parameterType="Integer">
@@ -38,6 +39,9 @@
             </if>
             <if test="status != null">
                 and status = #{status}
+            </if>
+            <if test="info != null">
+                and info = #{info}
             </if>
         </where>
     </select>

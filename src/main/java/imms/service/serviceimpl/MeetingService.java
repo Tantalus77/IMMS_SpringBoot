@@ -45,6 +45,7 @@ public class MeetingService implements MeetingServiceInterface {
         return false;
     }
 
+
     @Override
     public boolean deleteMeetings(List<Integer> meetingIds) {
         if(!meetingIds.isEmpty()){
@@ -106,5 +107,17 @@ public class MeetingService implements MeetingServiceInterface {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean checkIn(Integer meetingId, int userId) {
+        participateMapper.checkIn(meetingId,userId);
+        return true;
+    }
+
+    @Override
+    public boolean checkInList(Integer meetingId, int isAttend) {
+        participateMapper.checkInList(meetingId,isAttend);
+        return true;
     }
 }
