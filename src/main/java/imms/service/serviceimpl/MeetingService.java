@@ -116,8 +116,7 @@ public class MeetingService implements MeetingServiceInterface {
     }
 
     @Override
-    public boolean checkInList(Integer meetingId, int isAttend) {
-        participateMapper.checkInList(meetingId,isAttend);
-        return true;
+    public List<User> checkInList(Integer meetingId, int isAttend) {
+        return participateMapper.checkInList(meetingId,isAttend);
     }
 }

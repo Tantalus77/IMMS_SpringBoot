@@ -99,5 +99,5 @@ public interface MeetingServiceInterface {
      * @param isAttend
      * @return
      */
-    public boolean checkInList(Integer meetingId, int isAttend);
+    public List<User> checkInList(Integer meetingId, int isAttend);
 }
