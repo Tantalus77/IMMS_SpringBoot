@@ -106,7 +106,7 @@ public class ReserveService implements ReserveServiceInterface {
     }
 
     //9.通过预约状态查询预约
-    public List<Reserve> selectByReserveStatus(Integer status) {
+    public List<Reserve> selectByReserveStatus(int status) {
         List<Reserve> reserves = reserveMapper.selectByStatus(status);
         return reserves;
     }

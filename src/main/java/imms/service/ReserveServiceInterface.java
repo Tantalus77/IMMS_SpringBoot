@@ -74,6 +74,20 @@ public interface ReserveServiceInterface {
      */
     public List<Reserve> selectByUserId(int userId);
 
+    /**
+     * 通过预约状态查询会议
+     * @param status
+     * @return
+     */
+    public List<Reserve> selectByReserveStatus(int status);
+
+    /**
+     * 通过会议室id查询会议
+     * @param MeetingId
+     * @return
+     */
+    public List<Reserve> selectByMeetingId(Integer MeetingId);
+
 
     /**
      * 通过会议室Id查找预约
