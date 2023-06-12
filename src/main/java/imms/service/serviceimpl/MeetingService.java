@@ -119,4 +119,10 @@ public class MeetingService implements MeetingServiceInterface {
     public List<User> checkInList(Integer meetingId, int isAttend) {
         return participateMapper.checkInList(meetingId,isAttend);
     }
+
+    @Override
+    public boolean isExist(Integer meetingId) {
+        List<Meeting>result = meetingMapper.selectById(meetingId);
+        return result.size() > 0 ? true: false;
+    }
 }

@@ -3,7 +3,7 @@ package imms.model;
 public class Meeting {
     private Integer meetingId;
     private String date;
-    private String starTime;
+    private String startTime;
     private String endTime;
     private String theme;
     private String introduction;
@@ -24,12 +24,12 @@ public class Meeting {
         this.date = date;
     }
 
-    public String getStarTime() {
-        return starTime;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setStarTime(String starTime) {
-        this.starTime = starTime;
+    public void setStartTime(String starTime) {
+        this.startTime = starTime;
     }
 
     public String getEndTime() {
@@ -61,7 +61,7 @@ public class Meeting {
         return "Meeting{" +
                 "meetingID=" + meetingId +
                 ", date='" + date + '\'' +
-                ", starTime='" + starTime + '\'' +
+                ", starTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", theme='" + theme + '\'' +
                 ", introduction='" + introduction + '\'' +

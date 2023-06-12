@@ -5,14 +5,14 @@
 <mapper namespace="imms.dao.MeetingMapper">
 
     <insert id="addMeeting" parameterType="imms.model.Meeting" keyProperty="meetingId" useGeneratedKeys="true">
-        insert into meeeting
-        values (#{meetingId},#{date},#{starTime},#{endTime},#{theme},#{introduction});
+        insert into meeting
+        values (#{meetingId},#{date},#{startTime},#{endTime},#{theme},#{introduction});
     </insert>
     <update id="updateMeeting" parameterType="imms.model.Meeting">
         update meeting set
         meetingId = #{meetingId},
         date = #{date},
-        starTime = #{starTime},
+        startTime = #{startTime},
         endTime = #{endTime},
         theme = #{theme},
         introduction = #{introduction}
@@ -31,8 +31,8 @@
             <if test="date != null &amp; date != ''">
                 and date = #{date}
             </if>
-            <if test="starTime != null &amp; starTime != ''">
-                and starTime = #{starTime}
+            <if test="startTime != null &amp; starTime != ''">
+                and starTime = #{startTime}
             </if>
             <if test="endTime != null &amp; endTime != ''">
                 and endTime = #{endTime}

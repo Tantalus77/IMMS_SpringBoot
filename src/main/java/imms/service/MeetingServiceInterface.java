@@ -100,4 +100,11 @@ public interface MeetingServiceInterface {
      * @return
      */
     public List<User> checkInList(Integer meetingId, int isAttend);
+
+    /**
+     * 检查会议是否存在
+     * @param meetingId
+     * @return
+     */
+    public boolean isExist(Integer meetingId);
 }

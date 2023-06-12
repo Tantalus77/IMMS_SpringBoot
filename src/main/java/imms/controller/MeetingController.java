@@ -1,6 +1,5 @@
 package imms.controller;
 
-import com.alibaba.fastjson.JSON;
 import imms.model.Meeting;
 import imms.model.Result;
 import imms.model.User;
@@ -37,6 +36,7 @@ public class MeetingController {
     @PostMapping("/update")
     public Result updateMeeting(@RequestBody Meeting meeting){
         if(meeting == null) return new Result(INPUT_ERROR,null,"没有输入数据");
+        if(!ms.isExist(meeting.getMeetingId())) return new Result(INPUT_ERROR,null,"要修改的会议不存在！");
 
         try{
             ms.updateMeeting(meeting);
