@@ -31,8 +31,8 @@
             <if test="date != null &amp; date != ''">
                 and date = #{date}
             </if>
-            <if test="startTime != null &amp; starTime != ''">
-                and starTime = #{startTime}
+            <if test="startTime != null &amp; startTime != ''">
+                and startTime = #{startTime}
             </if>
             <if test="endTime != null &amp; endTime != ''">
                 and endTime = #{endTime}

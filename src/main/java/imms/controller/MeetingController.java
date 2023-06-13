@@ -1,5 +1,6 @@
 package imms.controller;
 
+import com.alibaba.fastjson.JSON;
 import imms.model.Meeting;
 import imms.model.Result;
 import imms.model.User;
@@ -7,6 +8,7 @@ import imms.service.MeetingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.IntegerSyntax;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +76,7 @@ public class MeetingController {
         return new Result(DAO_SUCCESS,null,"删除成功！");
     }
 
+    @CrossOrigin
     @GetMapping("/selectAll")
     public Result selectAll(){
         List<Meeting> result = null;
@@ -116,15 +119,28 @@ public class MeetingController {
     @PostMapping("/addParticipants")
     public Result addParticipants(@RequestBody Map<String,Object> data){
         if(data.isEmpty()) return new Result(INPUT_ERROR, null,"没有输入数据！");
-        int[] userIds = null;
+        //我是傻逼，为什么一开始userId类型要用int？？？？？？
+        List<Integer> userIds = null;
+        int[] userIdsInt = null;
         try{
-            userIds = (int[])data.get("userIds");
+            //使用fastjson将data.get("userIds")转换为List
+            userIds = JSON.parseArray(data.get("userIds").toString(), Integer.class);
+            if(userIds == null || userIds.size() > 0) {
+                userIdsInt = new int[userIds.size()];
+            }else{
+                return new Result(SERVICE_ERROR, null, "json转List出错");
+            }
+            //List<Integer>转为int[]
+            userIdsInt = userIds.stream().mapToInt(Integer::intValue).toArray();
         }catch (Exception e) {
             e.printStackTrace();
             return new Result(SERVICE_ERROR,null,"类型转换出错！！");
         }
+        if(userIds == null || userIds.isEmpty()) return new Result(SERVICE_ERROR, null, "类型转换出错！");
+        if(userIdsInt.length == 0) return new Result(SERVICE_ERROR, null, "类型转换出错！");
         try{
-            ms.addParticipants((Integer)data.get("meetingId"),userIds);
+
+            ms.addParticipants((Integer)data.get("meetingId"),userIdsInt);
         }catch (Exception e) {
             e.printStackTrace();
             return new Result(DAO_ERROR, null, "数据库操作出错！");
@@ -148,15 +164,23 @@ public class MeetingController {
     @PostMapping("/deleteParticipants")
     public Result deleteParticipants(@RequestBody Map<String,Object> data){
         if(data.isEmpty()) return new Result(INPUT_ERROR, null,"没有输入数据！");
-        int[] userIds = null;
+        List<Integer> userIds = null;
+        int[] userIdsInt = null;
         try{
-            userIds = (int[])data.get("userIds");
+            userIds = JSON.parseArray(data.get("userIds").toString(), Integer.class);
+            if(userIds == null || userIds.size() > 0) {
+                userIdsInt = new int[userIds.size()];
+            }else{
+                return new Result(SERVICE_ERROR, null, "json转List出错");
+            }
+            //List<Integer>转为int[]
+            userIdsInt = userIds.stream().mapToInt(Integer::intValue).toArray();
         }catch (Exception e) {
             e.printStackTrace();
             return new Result(SERVICE_ERROR,null,"类型转换出错！！");
         }
         try{
-            ms.deleteParticipants((Integer)data.get("meetingId"),userIds);
+            ms.deleteParticipants((Integer)data.get("meetingId"),userIdsInt);
         }catch (Exception e) {
             e.printStackTrace();
             return new Result(DAO_ERROR, null, "数据库操作出错！");
@@ -202,6 +226,6 @@ public class MeetingController {
         }
         if(users.isEmpty()) return new Result(SELECT_ERROR, null, "没有查找到对应状态的用户！");
         return new Result(DAO_SUCCESS,users,"查询成功！");
-
     }
+
 }
