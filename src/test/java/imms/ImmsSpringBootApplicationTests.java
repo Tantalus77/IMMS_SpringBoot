@@ -1,5 +1,7 @@
 package imms;
 
+import imms.dao.MeetingMapper;
+import imms.dao.RoomMapper;
 import imms.model.Room;
 import imms.model.User;
 import imms.service.RoomServiceInterface;
@@ -19,6 +21,12 @@ class ImmsSpringBootApplicationTests {
 
     @Autowired
     private RoomServiceInterface roomServiceInterface;
+
+    @Autowired
+    private RoomMapper roomMapper;
+
+    @Autowired
+    private MeetingMapper meetingMapper;
 //    @Test
 //    void testUserSelect() {
 //        User user = new User();
@@ -37,14 +45,15 @@ class ImmsSpringBootApplicationTests {
 //        System.out.println(select);
 //    }
 
-    @Test
-    void testException(){
-        try{
-            System.out.println(userServiceInterface.selectAll());
 
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+    @Test
+    void test2(){
+        System.out.println(roomMapper.selectByTime("10:30","12:55"));
+    }
+
+    @Test
+    void test3(){
+        System.out.println(meetingMapper.selectByRoom(4,"2023-6-14"));
     }
 
 }

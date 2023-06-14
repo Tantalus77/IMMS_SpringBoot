@@ -1,5 +1,6 @@
 package imms.dao;
 
+import imms.model.Meeting;
 import imms.model.Room;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -55,5 +56,9 @@ public interface RoomMapper {
     修改数据库的方法
      */
     void updateRoom(Room room);
+
+    @Select("select * from roominfo where roomOpenTime < #{startTime} and roomCloseTime > #{endTime}")
+    List<Room> selectByTime(String startTime, String endTime);
+
 
 }

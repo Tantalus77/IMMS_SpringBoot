@@ -36,4 +36,14 @@ public interface MeetingMapper {
 
     //6.通过特定条件查询会议
     List<Meeting> select(Meeting meeting);
+
+    /**
+     * 查询某一天某个会议室的所有会议
+     * @param roomId
+     * @return
+     */
+    @Select("SELECT m.meetingId,m.date,m.startTime,m.endTime,m.theme,m.introduction " +
+            "FROM reserve left join meeting m on reserve.meetingId = m.meetingId " +
+            "WHERE reserve.roomId = #{roomId} and m.date = #{date}")
+    List<Meeting> selectByRoom(int roomId,String date);
 }

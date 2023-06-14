@@ -9,4 +9,6 @@ public class Code {
     public static final Integer DAO_SUCCESS = 100;
     public static final Integer SERVICE_ERROR=220;
 
+    public static final String SERVER_IP = "139.155.147.127";
+
 }

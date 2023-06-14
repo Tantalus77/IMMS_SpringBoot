@@ -8,6 +8,7 @@ public class Room {
     private String roomNumber = "";
     private String roomAddress ="";
 
+
     public int getRoomId() {
         return roomId;
     }
@@ -67,4 +68,6 @@ public class Room {
                 ", roomAddress='" + roomAddress + '\'' +
                 '}';
     }
+
+
 }

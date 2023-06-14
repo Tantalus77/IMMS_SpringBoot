@@ -3,8 +3,10 @@ package imms.controller;
 import com.alibaba.fastjson.JSON;
 import imms.model.Meeting;
 import imms.model.Result;
+import imms.model.Room;
 import imms.model.User;
 import imms.service.MeetingServiceInterface;
+import imms.service.RoomServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,9 @@ import static imms.utils.Code.*;
 public class MeetingController {
     @Autowired
     private MeetingServiceInterface ms;
+
+    @Autowired
+    private RoomServiceInterface rs;
 
     @PostMapping("/add")
     public Result addMeeting(@RequestBody Meeting meeting){
@@ -226,6 +231,20 @@ public class MeetingController {
         }
         if(users.isEmpty()) return new Result(SELECT_ERROR, null, "没有查找到对应状态的用户！");
         return new Result(DAO_SUCCESS,users,"查询成功！");
+    }
+
+    @PostMapping("/availableRoom")
+    public Result availableRoom(@RequestBody Map<String,String> data){
+        if(data.isEmpty() || data.get("date")==null || data.get("startTime")==null || data.get("endTime")==null){
+            return new Result(INPUT_ERROR,null,"请检查是否输入了需要的数据！");
+        }
+        List<Room> rooms = null;
+        try{
+            rooms = rs.availableRoom(data.get("date"), data.get("startTime"),data.get("endTime"));
+        }catch (Exception e) {
+            return new Result(UNKNOWN_ERROR, null, "数据库出错或业务出错！");
+        }
+        return new Result(DAO_SUCCESS,rooms,"搜索成功！");
     }
 
 }

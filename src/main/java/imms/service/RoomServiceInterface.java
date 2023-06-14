@@ -91,4 +91,10 @@ public interface RoomServiceInterface {
      */
     public boolean updateRoom(Room room);
 
+    /**
+     * 查找某个时间段空闲的会议室
+     * @return
+     */
+    public List<Room> availableRoom(String date,String startTime,String EndTime);
+
 }
