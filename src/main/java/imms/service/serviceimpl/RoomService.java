@@ -5,15 +5,19 @@ import imms.dao.RoomMapper;
 import imms.model.Meeting;
 import imms.model.Room;
 import imms.service.RoomServiceInterface;
+import imms.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static imms.utils.Utils.toTime;
 
 @Service
 public class RoomService implements RoomServiceInterface {
@@ -223,8 +227,14 @@ public class RoomService implements RoomServiceInterface {
     public List<Room> availableRoom(String date, String startTime, String endTime) {
         System.out.println("date:"+date+"startTime"+startTime+"endTime"+endTime);
         System.out.println("开始搜索可用会议室.....");
-        //时间的格式化器
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss");
+        //初始化时间
+        LocalTime start = toTime(startTime);
+        LocalTime end = toTime(endTime);
+        //判断是否转换正确
+        if(start == null || end == null){
+            System.out.println("转换出错！");
+            return null;
+        }
         //搜索在输入时间内已经开门（或是没有关门）的房间的列表
         System.out.println("第一步：查找输入事件内开门的房间");
         List<Room> roomList = roomMapper.selectByTime(startTime,endTime);
@@ -238,7 +248,6 @@ public class RoomService implements RoomServiceInterface {
             System.out.println("正在处理会议室："+room.getRoomId()+"...");
             //搜索当前会议室的当天的所有会议
             List<Meeting> meetingOfTheDay = meetingMapper.selectByRoom(room.getRoomId(),date);
-
             System.out.println("房间"+room.getRoomId()+date+"的会议列表为："+meetingOfTheDay);
             if(meetingOfTheDay.size() > 0){
                 //如果会议列表不空，循环这个会议列表；
@@ -246,16 +255,25 @@ public class RoomService implements RoomServiceInterface {
                         meetingOfTheDay) {
                     //先将标志设置为false
                     flag = false;
+                    //转换时间
+                    LocalTime m_start = toTime(meeting.getStartTime());
+                    LocalTime m_end = toTime(meeting.getEndTime());
                     //如果输入的开始时间早于当前会议的结束时间 并且 输入的结束时间晚于当前会议的开始时间，则说明时间冲突，直接结束循环，并设置flag为true
-                    if(formatter.format(startTime).compareTo(formatter.format(meeting.getEndTime())) < 0
-                            && formatter.format(endTime).compareTo(formatter.format(meeting.getStartTime())) > 0){
+                    System.out.println("开始时间是否早于结束时间？"+start.isBefore(m_end));
+                    System.out.println("结束时间是否晚于开始时间？"+end.isAfter(m_start));
+                    if(start.isBefore(m_end) && end.isAfter(m_start)){
                         flag = true;
+                        System.out.println("时间重叠了！！");
                         break;
                     }
                 }
-            }
+            }else{flag = false;}
             //若循环结束,标志为false，则说明该会议室的所有会议都不与输入的时间冲突，则该会议室可用
-            if(flag == false) availableRoom.add(room);
+            System.out.println("是否冲突？"+flag);
+            if(flag == false) {
+                availableRoom.add(room);
+                System.out.println("添加会议室"+room.getRoomId()+"到列表");
+            }
 
         }
         return availableRoom;

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.List;
 
 @SpringBootTest
@@ -55,5 +57,16 @@ class ImmsSpringBootApplicationTests {
     void test3(){
         System.out.println(meetingMapper.selectByRoom(4,"2023-6-14"));
     }
+
+    @Test
+    void test4(){
+        System.out.println(roomServiceInterface.availableRoom("2023-6-15","13:00","15:00"));
+    }
+
+    @Test
+    void test5(){
+        System.out.println(roomServiceInterface.availableRoom("2023-6-15","7:30:08","11:90"));
+    }
+
 
 }

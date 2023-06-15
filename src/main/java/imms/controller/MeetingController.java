@@ -244,6 +244,9 @@ public class MeetingController {
         }catch (Exception e) {
             return new Result(UNKNOWN_ERROR, null, "数据库出错或业务出错！");
         }
+        if(rooms == null){
+            return new Result(UNKNOWN_ERROR,null,"您输入的时间段内没有空闲会议室！请换个时间或检查输入是否正确！");
+        }
         return new Result(DAO_SUCCESS,rooms,"搜索成功！");
     }
 
