@@ -67,4 +67,13 @@ public class Meeting {
                 ", introduction='" + introduction + '\'' +
                 '}';
     }
+
+    public Meeting(Integer meetingId, String date, String startTime, String endTime, String theme, String introduction) {
+        this.meetingId = meetingId;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.theme = theme;
+        this.introduction = introduction;
+    }
 }

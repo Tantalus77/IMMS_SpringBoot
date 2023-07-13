@@ -34,7 +34,7 @@ public interface RoomMapper {
      */
 
     @Select("select * from roominfo where roomId = #{roomId}")
-    Room selectRoomById(int roomId);
+    Room selectRoomById(Integer roomId);
 
     @Select("select * from roominfo where roomSize = #{roomSize}")
     List<Room> selectRoomBySize(int roomSize);

@@ -26,7 +26,7 @@ public interface UserMapper {
 
     //通过id查询用户
     @Select("select * from userinfo where userId = #{userId}")
-    User selectById(int userId);
+    User selectById(Integer userId);
 
     //通过名字查询用户
     @Select("select * from userinfo where username like #{username}")

@@ -1,7 +1,7 @@
 package imms.model;
 
 public class Room {
-    private int roomId = -1;
+    private Integer roomId = -1;
     private int roomSize = -1;
     private String roomOpenTime = "";
     private String roomCloseTime = "";

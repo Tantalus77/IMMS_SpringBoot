@@ -11,7 +11,7 @@ public interface MeetingServiceInterface {
      * @param meeting
      * @return
      */
-    public boolean addMeeting(Meeting meeting);
+    public Integer addMeeting(Meeting meeting);
 
     /**
      * 修改某个会议
@@ -59,7 +59,7 @@ public interface MeetingServiceInterface {
      * @param userId
      * @return
      */
-    public boolean deleteParticipant(Integer meetingId, int userId);
+    public boolean deleteParticipant(Integer meetingId, Integer userId);
 
     /**
      * 根据会议ID和用户ID批量删除某个会议中的参会人
@@ -75,7 +75,7 @@ public interface MeetingServiceInterface {
      * @param userId
      * @return
      */
-    public boolean addParticipant(Integer meetingId, int userId);
+    public boolean addParticipant(Integer meetingId, Integer userId);
 
     /**
      * 根据会议ID和用户ID批量新增参会人
@@ -83,7 +83,7 @@ public interface MeetingServiceInterface {
      * @param userIds
      * @return
      */
-    public boolean addParticipants(Integer meetingId, int[] userIds);
+    public boolean addParticipants(Integer meetingId, List<Integer> userIds);
 
     /**
      * 签到
@@ -91,7 +91,7 @@ public interface MeetingServiceInterface {
      * @param userId
      * @return
      */
-    public boolean checkIn(Integer meetingId, int userId);
+    public boolean checkIn(Integer meetingId, Integer userId);
 
     /**
      * 查询签到或没签到的参会人

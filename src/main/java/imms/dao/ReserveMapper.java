@@ -42,11 +42,11 @@ public interface ReserveMapper {
 
     //6.查询某个用户的全部预约
     @Select("select * from reserve where userId = #{userId}}")
-    List<Reserve> selectByUserId(int userId);
+    List<Reserve> selectByUserId(Integer userId);
 
     //7.查询某个房间的全部预约
     @Select("select * from reserve where roomId = #{roomId}}")
-    List<Reserve> selectByRoomId(int roomId);
+    List<Reserve> selectByRoomId(Integer roomId);
 
     //8.查询某个会议的所有预约
     @Select("select * from reserve where meetingId = #{meeting}}")

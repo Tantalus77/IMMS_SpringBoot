@@ -88,13 +88,13 @@ public class ReserveService implements ReserveServiceInterface {
     }
 
     //6.查询某个用户的全部预约
-    public List<Reserve> selectByUserId(int UserId){
-        List<Reserve> reserves = reserveMapper.selectByUserId(UserId);
+    public List<Reserve> selectByUserId(Integer userId){
+        List<Reserve> reserves = reserveMapper.selectByUserId(userId);
         return reserves;
     }
 
     //7.查询某个房间的全部预约
-    public List<Reserve> selectByRoomId(int roomId){
+    public List<Reserve> selectByRoomId(Integer roomId){
         List<Reserve> reserves = reserveMapper.selectByRoomId(roomId);
         return reserves;
     }

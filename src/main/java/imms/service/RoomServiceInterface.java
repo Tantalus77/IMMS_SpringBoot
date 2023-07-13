@@ -17,7 +17,7 @@ public interface RoomServiceInterface {
      * @param roomId
      * @return
      */
-    public boolean deleteRoom(int roomId);
+    public boolean deleteRoom(Integer roomId);
 
     /**
      查询会议室相关的方法，有以下一些：
@@ -37,7 +37,7 @@ public interface RoomServiceInterface {
      * @param roomId
      * @return
      */
-    public Room selectRoomById(int roomId);
+    public Room selectRoomById(Integer roomId);
 
     /**
      * 通过会议室尺寸查找会议室

@@ -1,7 +1,7 @@
 package imms.model;
 
 public class User {
-    private int userId = 0;
+    private Integer userId = 0;
     private String userName = "";
     private String userNumber = "";
     private String userPhoneNumber = "";
@@ -13,7 +13,7 @@ public class User {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

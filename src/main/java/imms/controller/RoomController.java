@@ -21,7 +21,7 @@ public class RoomController {
         System.out.println("/rooms/addRoom接受到的数据==>"+room);//打印输出接受的参数
 
         //业务流程
-        int roomId = roomServiceInterface.addRoom(room);
+        Integer roomId = roomServiceInterface.addRoom(room);
 
         if(roomId == -1){
             //注册失败
@@ -37,7 +37,7 @@ public class RoomController {
     }
 
     @DeleteMapping("/{roomId}")
-    public String deleteRoom(@PathVariable int roomId){
+    public String deleteRoom(@PathVariable Integer roomId){
         System.out.println("/rooms/"+roomId+" is running...");//打印输出参数
 
         //业务流程
@@ -52,7 +52,7 @@ public class RoomController {
     public String deleteRooms(@RequestBody ArrayList<Integer> roomIds){
         System.out.println("/rooms/deleteRooms接受到参数==>"+roomIds);//打印输出接受的参数
 
-        for(int i:roomIds){
+        for(Integer i:roomIds){
             roomServiceInterface.deleteRoom(i);
         }
 

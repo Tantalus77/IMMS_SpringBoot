@@ -34,7 +34,7 @@ public class UserService implements UserServiceInterface {
     }
 
 
-    public User selectById(int userId) {
+    public User selectById(Integer userId) {
 
         //封装结果集
         User user = um.selectById(userId);
@@ -148,7 +148,7 @@ public class UserService implements UserServiceInterface {
      * @param userId
      * @return void
      */
-    public boolean deleteUser(int userId) {
+    public boolean deleteUser(Integer userId) {
 
         //执行
         um.deleteUser(userId);
@@ -311,11 +311,9 @@ public class UserService implements UserServiceInterface {
      */
     public int insertUser(User user){
         boolean flag = hasUser(user);
-        int userId = -1;
-
+        Integer userId = null;
         if(flag){
             return userId;
-
         }else{
             userId = addUser(user);
         }

@@ -18,7 +18,7 @@ public interface MeetingMapper {
      */
 
     //1.添加一个会议
-    void addMeeting(Meeting meeting);
+    Integer addMeeting(Meeting meeting);
 
     //2.通过id删除一个会议
     void deleteMeeting(Integer meetingId);

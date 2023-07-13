@@ -135,17 +135,14 @@ public class MeetingController {
             }else{
                 return new Result(SERVICE_ERROR, null, "json转List出错");
             }
-            //List<Integer>转为int[]
-            userIdsInt = userIds.stream().mapToInt(Integer::intValue).toArray();
         }catch (Exception e) {
             e.printStackTrace();
             return new Result(SERVICE_ERROR,null,"类型转换出错！！");
         }
         if(userIds == null || userIds.isEmpty()) return new Result(SERVICE_ERROR, null, "类型转换出错！");
-        if(userIdsInt.length == 0) return new Result(SERVICE_ERROR, null, "类型转换出错！");
         try{
 
-            ms.addParticipants((Integer)data.get("meetingId"),userIdsInt);
+            ms.addParticipants((Integer)data.get("meetingId"),userIds);
         }catch (Exception e) {
             e.printStackTrace();
             return new Result(DAO_ERROR, null, "数据库操作出错！");

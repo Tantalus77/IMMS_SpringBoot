@@ -2,8 +2,8 @@ package imms.model;
 
 public class Reserve {
     private Integer reserveId;
-    private  int userId;
-    private  int roomId;
+    private  Integer userId;
+    private  Integer roomId;
     private Integer meetingId;
     private Integer status ;
 
@@ -25,19 +25,19 @@ public class Reserve {
         this.reserveId = reserveId;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 

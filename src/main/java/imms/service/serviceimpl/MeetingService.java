@@ -19,12 +19,12 @@ public class MeetingService implements MeetingServiceInterface {
     private ParticipateMapper participateMapper;
 
     @Override
-    public boolean addMeeting(Meeting meeting) {
+    public Integer addMeeting(Meeting meeting) {
         if(meeting!=null){
-            meetingMapper.addMeeting(meeting);
-            return true;
+            Integer meetingId = meetingMapper.addMeeting(meeting);
+            return meetingId;
         }
-        return false;
+        return null;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MeetingService implements MeetingServiceInterface {
     }
 
     @Override
-    public boolean deleteParticipant(Integer meetingId, int userId) {
+    public boolean deleteParticipant(Integer meetingId, Integer userId) {
         participateMapper.deleteParticipant(meetingId,userId);
         return true;
     }
@@ -92,25 +92,26 @@ public class MeetingService implements MeetingServiceInterface {
     }
 
     @Override
-    public boolean addParticipant(Integer meetingId, int userId) {
+    public boolean addParticipant(Integer meetingId, Integer userId) {
         participateMapper.addParticipant(meetingId, userId);
         return true;
     }
 
     @Override
-    public boolean addParticipants(Integer meetingId, int[] userIds) {
-        int length = userIds.length;
-        if (length > 0) {
-            for (int i = 0; i < length; i++) {
-                participateMapper.addParticipant(meetingId, userIds[i]);
+    public boolean addParticipants(Integer meetingId, List<Integer> userIds) {
+        if(!userIds.isEmpty()){
+            for (Integer userId:
+                userIds) {
+            participateMapper.addParticipant(meetingId,userId);
             }
             return true;
         }
+
         return false;
     }
 
     @Override
-    public boolean checkIn(Integer meetingId, int userId) {
+    public boolean checkIn(Integer meetingId, Integer userId) {
         participateMapper.checkIn(meetingId,userId);
         return true;
     }

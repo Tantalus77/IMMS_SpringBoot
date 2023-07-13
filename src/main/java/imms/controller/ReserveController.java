@@ -1,7 +1,10 @@
 package imms.controller;
 
+import com.alibaba.fastjson.JSON;
+import imms.model.Meeting;
 import imms.model.Reserve;
 import imms.model.Result;
+import imms.service.MeetingServiceInterface;
 import imms.service.ReserveServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,9 @@ import static imms.utils.Code.*;
 public class ReserveController {
     @Autowired
     private ReserveServiceInterface rs;
+    @Autowired
+    private MeetingServiceInterface ms;
+
     @PostMapping ("/add")
     public Result addReserve(@RequestBody Reserve reserve){
         if(reserve == null) return new Result(INPUT_ERROR,null,"没有传入数据！");
@@ -89,7 +95,7 @@ public class ReserveController {
         return new Result(DAO_SUCCESS,result,"搜索成功！");
     }
     @GetMapping("/selectByUser/{userId}")
-    public Result selectByUser(@PathVariable int userId){
+    public Result selectByUser(@PathVariable Integer userId){
         List<Reserve> result = null;
         try{
             result = rs.selectByUserId(userId);
@@ -116,7 +122,7 @@ public class ReserveController {
     }
 
     @GetMapping("/selectByRoom/{roomId}")
-    public Result selectByRoom(@PathVariable int roomId){
+    public Result selectByRoom(@PathVariable Integer roomId){
         List<Reserve> result = null;
         try{
             result = rs.selectByRoomId(roomId);
@@ -163,6 +169,32 @@ public class ReserveController {
             return new Result(DAO_ERROR,null,"数据库操作失败！");
         }
         return new Result(DAO_SUCCESS,null,"审核成功！");
+
+    }
+
+    @PostMapping("/reserve")
+    public Result reserve(@RequestBody Map<String,Object> data){
+        if(data.isEmpty()){return new Result(INPUT_ERROR,null,"没有输入数据！");}
+        String theme = (String)data.get("theme");
+        if(theme == null){return new Result(INPUT_ERROR,null,"请输入主题！");}
+        String date = (String)data.get("date");
+        if(date == null){return new Result(INPUT_ERROR,null,"请输入日期！");}
+        String startTime = (String)data.get("startTime");
+        if(startTime == null){return new Result(INPUT_ERROR,null,"请输入开始时间！");}
+        String endTime = (String)data.get("endTime");
+        if(endTime == null){return new Result(INPUT_ERROR,null,"请输入结束时间！");}
+        String intro = (String)data.get("introduction");
+        List<Integer> participants = JSON.parseArray((String)data.get("participants"),Integer.class);
+
+        try{
+            Meeting meeting = new Meeting(null,theme,date,startTime,endTime,intro);
+            Integer meetingId = ms.addMeeting(meeting);
+            ms.addParticipants(meetingId,participants);
+        }catch (Exception e) {
+            return new Result(SERVICE_ERROR,null,"服务出错！");
+        }
+        return new Result(DAO_SUCCESS,null,"操作成功！");
+
 
     }
 

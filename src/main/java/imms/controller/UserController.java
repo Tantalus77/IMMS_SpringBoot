@@ -56,7 +56,7 @@ public class UserController {
         System.out.println("/users/registerByEmail 接受到的==>"+user);//检查是否正确接受参数
 
         //业务流程
-        int userId = userServiceInterface .registerByEmail(user);
+        Integer userId = userServiceInterface .registerByEmail(user);
         if(userId == -1){
             //注册失败
             System.out.println("注册失败");
@@ -74,7 +74,7 @@ public class UserController {
         System.out.println("/users/addUser接受到的==>"+user);//打印接受到的参数信息
 
         //业务流程
-        int userId = userServiceInterface.insertUser(user);
+        Integer userId = userServiceInterface.insertUser(user);
         if(userId == -1){
             //注册失败
             System.out.println("添加失败");
@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @GetMapping("/deleteUser")
-    public String deleteUser(@RequestParam int userId,@RequestParam int curUserId){
+    public String deleteUser(@RequestParam Integer userId,@RequestParam int curUserId){
         System.out.println("/users/deleteUser接受到的==>"+"要删除的用户的id"+userId+"当前登录用户的id"+curUserId);//打印接受的参数
 
         //业务流程

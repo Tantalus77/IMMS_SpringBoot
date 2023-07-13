@@ -72,7 +72,7 @@ public interface ReserveServiceInterface {
      * @param userId
      * @return
      */
-    public List<Reserve> selectByUserId(int userId);
+    public List<Reserve> selectByUserId(Integer userId);
 
     /**
      * 通过预约状态查询会议
@@ -94,6 +94,6 @@ public interface ReserveServiceInterface {
      * @param roomId
      * @return
      */
-    public List<Reserve> selectByRoomId(int roomId);
+    public List<Reserve> selectByRoomId(Integer roomId);
 
 }

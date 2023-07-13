@@ -13,7 +13,7 @@ public interface UserServiceInterface {
      * @param userId
      * @return
      */
-    public User selectById(int userId);
+    public User selectById(Integer userId);
 
     /**
      * 通过姓名模糊查询用户
@@ -81,7 +81,7 @@ public interface UserServiceInterface {
      * 通过id删除该用户
      * @param userId
      */
-    public boolean deleteUser(int userId);
+    public boolean deleteUser(Integer userId);
 
     /**
      * 通过邮箱登录

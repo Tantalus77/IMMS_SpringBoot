@@ -66,7 +66,7 @@ public class RoomService implements RoomServiceInterface {
      * 删除某个会议室
      * @param roomId 要删除的会议室的id
      */
-    public boolean deleteRoom(int roomId){
+    public boolean deleteRoom(Integer roomId){
 
         //执行
         roomMapper.deleteRoom(roomId);
@@ -84,7 +84,7 @@ public class RoomService implements RoomServiceInterface {
      * @param roomId 要查找的会议室的id
      * @return 查找到的room（唯一）
      */
-    public Room selectRoomById(int roomId){
+    public Room selectRoomById(Integer roomId){
 
         //执行
         Room room = roomMapper.selectRoomById(roomId);
