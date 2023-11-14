@@ -1,6 +1,7 @@
 package imms.service.serviceimpl;
 
 import imms.dao.UserMapper;
+import imms.model.Meeting;
 import imms.model.User;
 import imms.service.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -321,5 +322,39 @@ public class UserService implements UserServiceInterface {
         return userId;
     }
 
+    /*****************************************************************************
+     *
+     *                                重写的方法
+     *
+     ****************************************************************************/
+    //TODO
+    @Override
+    public boolean editInfo(User user) {
+        return false;
+    }
 
+    @Override
+    public boolean setPictureInfo(String picAddress) {
+        return false;
+    }
+
+    @Override
+    public boolean reserveMeeting(Meeting meeting, List<Integer> userIds) {
+        return false;
+    }
+
+    @Override
+    public List<Meeting> myMeetings(String dateTime) {
+        return null;
+    }
+
+    @Override
+    public List<Meeting> historyMeetings(Integer userId) {
+        return null;
+    }
+
+    @Override
+    public boolean attendMeetingByCode(Integer userId, Integer code) {
+        return false;
+    }
 }

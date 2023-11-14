@@ -489,7 +489,7 @@
 
            axios({
                method:"get",
-               url:"http://139.155.147.127:8081/users/getSessionUser"
+               url:"http://111.229.32.218:8081/users/getSessionUser"
            }).then(function(resp){
                _this.currentUser = resp.data;
                _this.curUserUpdateInfo = Object.assign({},resp.data);
@@ -511,7 +511,7 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://139.155.147.127:8081/users/addUSer',
+                       url:'http://111.229.32.218:8081/users/addUSer',
                        data:_this.addUserInfo
                    }).then(function(resp){
                        if(resp.data == "fail"){
@@ -545,7 +545,7 @@
                    let _this = this;
                    axios({
                        method:'get',
-                       url:'http://139.155.147.127:8081/users/deleteUser?userId='+row.userId+'&curUserId='+_this.currentUser.userId,
+                       url:'http://111.229.32.218:8081/users/deleteUser?userId='+row.userId+'&curUserId='+_this.currentUser.userId,
 
                    }).then(function(resp){
                        if(resp.data == "success"){
@@ -597,7 +597,7 @@
                    let _this = this;
                    axios({
                        method:'post',
-                       url:"http://139.155.147.127:8081/users/deleteUsers",
+                       url:"http://111.229.32.218:8081/users/deleteUsers",
                        data: _this.selectedUserIds
                    }).then(function(resp){
                        if(resp.data = "success"){
@@ -619,7 +619,7 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://139.155.147.127:8081/users/editUser',
+                   url:'http://111.229.32.218:8081/users/editUser',
                    data:_this.editUserInfo,
                }).then(function(resp){
                    if(resp.data == "success"){
@@ -648,7 +648,7 @@
                var _this = this;
                axios({
                    method:"get",
-                   url:"http://139.155.147.127:8081/users/selectAll",
+                   url:"http://111.229.32.218:8081/users/selectAll",
 
                }).then(function(resp){
                    _this.tableData=resp.data;
@@ -665,7 +665,7 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://139.155.147.127:8081/users/editUser',
+                       url:'http://111.229.32.218:8081/users/editUser',
                        data:_this.curUserUpdateInfo
                    }).then(function(resp){
                        if(resp.data == "success"){
@@ -706,7 +706,7 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://139.155.147.127:8081/users/editUser',
+                       url:'http://111.229.32.218:8081/users/editUser',
                        data:info
                    }).then(function(resp){
                        if(resp.data == "success"){
@@ -765,7 +765,7 @@
                var _this = this;
                axios({
                    method:'post',
-                   url:'http://139.155.147.127:8081/users/select',
+                   url:'http://111.229.32.218:8081/users/select',
                    data:_this.userConditions,
                }).then(function(resp){
                    if(resp.data == "empty"){
@@ -794,7 +794,7 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://139.155.147.127:8081/rooms/addRoom',
+                       url:'http://111.229.32.218:8081/rooms/addRoom',
                        data:_this.addRoomInfo
                    }).then(function(resp){
                        if(resp.data == "repeated"){
@@ -827,7 +827,7 @@
                    let _this = this;
                    axios({
                        method:'get',
-                       url:'http://139.155.147.127:8081/rooms/'+row.roomId,
+                       url:'http://111.229.32.218:8081/rooms/'+row.roomId,
 
                    }).then(function(resp){
                        if(resp.data == "success"){
@@ -850,7 +850,7 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://139.155.147.127:8081/rooms/select',
+                   url:'http://111.229.32.218:8081/rooms/select',
                    data:_this.roomConditions,
                }).then(function(resp){
                    if(resp.data == "empty"){
@@ -881,7 +881,7 @@
                let _this = this;
                axios({
                    method:"get",
-                   url:"http://139.155.147.127:8081/rooms/selectAll",
+                   url:"http://111.229.32.218:8081/rooms/selectAll",
                }).then(function(resp){
                    _this.roomData=resp.data;
                });
@@ -921,7 +921,7 @@
                    let _this = this;
                    axios({
                        method:'post',
-                       url:"http://139.155.147.127:8081/rooms/deleteRooms",
+                       url:"http://111.229.32.218:8081/rooms/deleteRooms",
                        data: _this.selectedRoomsIds
                    }).then(function(resp){
                        if(resp.data = "success"){
@@ -942,7 +942,7 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://139.155.147.127:8081/editRoomServlet',
+                   url:'http://111.229.32.218:8081/editRoomServlet',
                    data:_this.editRoomInfo,
                }).then(function(resp){
                    if(resp.data == "success"){
