@@ -3,6 +3,7 @@ package imms.dao;
 import imms.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -74,6 +75,9 @@ public interface UserMapper {
      * @return void
      */
     void deleteUser(int userId);
+
+    @Update("update user set picture = #{picAddress} where userId = #{userId} ")
+    void setPicture(Integer userId, String picAddress);
 
 
 }

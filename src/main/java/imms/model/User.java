@@ -9,7 +9,7 @@ public class User {
     private String userEmail = "";
     private int isAdmin = 0;
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 

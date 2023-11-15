@@ -67,6 +67,14 @@ public interface UserServiceInterface {
      */
     public boolean attendMeetingByCode(Integer userId, Integer code);
 
+    /**
+     * 使用邮箱注册
+     * @param email
+     * @param password
+     * @return
+     */
+    public boolean registerId(String email, String password);
+
 
 
 }
