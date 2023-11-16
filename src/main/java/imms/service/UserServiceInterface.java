@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Transactional
- interface UserServiceInterface {
+ public interface UserServiceInterface {
     /**
      * 用户通过邮箱登录
      * @param email

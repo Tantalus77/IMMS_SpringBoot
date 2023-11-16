@@ -7,7 +7,7 @@ import imms.model.User;
 
 import java.util.List;
 
- interface AdminServiceInterface {
+ public interface AdminServiceInterface {
     /**
      * 管理员的登录，需要判断身份
      * @param email
