@@ -2,26 +2,27 @@ package imms.service;
 
 import imms.model.Meeting;
 import imms.model.Reserve;
+import imms.model.Room;
 import imms.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Transactional
-public interface UserServiceInterface {
+ interface UserServiceInterface {
     /**
      * 用户通过邮箱登录
      * @param email
      * @param password
      * @return
      */
-    public boolean loginByEmail(String email,String password);
+     boolean loginByEmail(String email,String password);
 
     /**
      * 用户管理自己的个人信息
      * @param user
      * @return
      */
-    public boolean editInfo(User user);
+     boolean editInfo(User user);
 
     /**
      * 用户修改头像，这里是把头像图片在文件系统中的地址保存到数据库中去
@@ -29,9 +30,10 @@ public interface UserServiceInterface {
      * @param picAddress
      * @return
      */
-    public boolean setPictureInfo(String picAddress);
+     boolean setPictureInfo(String picAddress);
 
     /**
+     * 预定会议
      * 用户预期输入主题、日期、时间范围、简介、是否签到、参与者
      * reserve中的字段有：预约者、房间id、会议id
      * meeting中的字段有：日期、开始时间、结束时间、主题、简介、是否签到
@@ -43,21 +45,28 @@ public interface UserServiceInterface {
      * @param meeting
      * @return
      */
-    public boolean reserveMeeting(Meeting meeting, List<Integer> userIds);
+     boolean reserveMeeting(Meeting meeting, List<Integer> userIds);
 
     /**
-     * 获取用户所给月份的所有会议，包括主持的和参加的
-     * @param dateTime
+     * 获取用户所有会议，包括主持的和参加的
+     * @param
      * @return
      */
-    public List<Meeting> myMeetings(String dateTime);
+     List<Meeting> myMeetings(Integer userId);
+
+    /**
+     * 获取我组织的会议（我是预定者的会议）
+     * @param userId
+     * @return
+     */
+     List<Meeting> myOrganizedMeeting(Integer userId);
 
     /**
      * 获取用户所有的历史会议，即获取当前时间之前的所有会议
      * @param userId
      * @return
      */
-    public List<Meeting> historyMeetings(Integer userId);
+     List<Meeting> historyMeetings(Integer userId);
 
 
     /**
@@ -65,7 +74,7 @@ public interface UserServiceInterface {
      * 要求用code找到会议id
      * @return
      */
-    public boolean attendMeetingByCode(Integer userId, Integer code);
+     boolean attendMeetingByCode(Integer userId, Integer code);
 
     /**
      * 使用邮箱注册
@@ -73,7 +82,28 @@ public interface UserServiceInterface {
      * @param password
      * @return
      */
-    public boolean registerId(String email, String password);
+     boolean register(String email, String password);
+
+    /**
+     * 向用户展示当前所有会议室
+     * @return
+     */
+     boolean allRooms();
+
+    /**
+     * 搜索会议，预期通过尺寸、时间、地址搜索会议室
+     * @param room
+     * @return
+     */
+     boolean selectRooms(Room room);
+
+    /**
+     * 邀请某位用户参加会议
+     * 预期：用户进入“我的会议”，点击查看某一会议的详情，配有一个可以搜索用户的搜索框，搜索框中输入邮箱或者姓名后会弹出下拉框，下拉框中有搜索到的用户，点击旁边的邀请按钮即可邀请
+     * @param userId
+     * @return
+     */
+     boolean invite(Integer userId);
 
 
 

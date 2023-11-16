@@ -12,7 +12,7 @@
                 roomId = #{roomId}
             </if>
             <if test="roomSize != null &amp; roomSize != -1">
-                AND roomSize = #{roomSize}
+                AND roomSize >= #{roomSize}
             </if>
             <if test="roomOpenTime != null &amp; roomOpenTime!='' ">
                 AND roomOpenTime &lt;= #{roomOpenTime}

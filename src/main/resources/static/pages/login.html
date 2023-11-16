@@ -102,7 +102,6 @@
                         <p><div class="err_msg" id="email_err" v-show="emailErr=='1'">请检查邮箱输入格式！</div>
                         <p>密码：<input class="inputBox" type="password" name="userPassword" v-model="userLoginData.userPassword"/></p><br>
                         <p><input type="button" id="button" value="登录" @click="submit()" ></p>
-                        <p><a href="register.html">还没有账号？点击注册</a></p>
                     </form>
                 </div>
 
@@ -141,14 +140,12 @@
                 let _this=this;
                 axios({
                     method:"post",
-                    url:"http://111.229.32.218:8081/users/loginByEmail",
+                    url:"http://localhost:8081/admin/loginByEmail",
                     data:_this.userLoginData
                 }).then(function(resp){
-                    if(resp.data == "admin"){
+                    if(resp.data.code == '100'){
                         location.href = "adminhome.html";
-                    }else if(resp.data == "normal"){
-                        location.href = "normalhome.html";
-                    }else if(resp.data == "fail"){
+                    }else{
                         _this.loginFail = 1;
                     }
                 })

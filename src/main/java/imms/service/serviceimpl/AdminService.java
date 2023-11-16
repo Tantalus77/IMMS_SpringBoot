@@ -84,6 +84,11 @@ public class AdminService implements AdminServiceInterface {
         if (user == null) {
             return um.selectAll();
         }
+        user.setUserName("%"+user.getUserName()+"%");
+        user.setUserEmail("%"+user.getUserEmail()+"%");
+        user.setUserNumber("%"+user.getUserNumber()+"%");
+        user.setUserPhoneNumber("%"+user.getUserPhoneNumber()+"%");
+
         return um.select(user);
     }
 
@@ -134,6 +139,7 @@ public class AdminService implements AdminServiceInterface {
     @Override
     public List<Room> selectRoom(Room room) {
         if(room == null) return rm.selectAll();
+        room.setRoomAddress("%"+room.getRoomAddress()+"%");
         return rm.selectRoom(room);
     }
 

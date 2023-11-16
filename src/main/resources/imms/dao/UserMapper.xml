@@ -54,7 +54,7 @@
     <!--插入-->
     <insert id="addUser" parameterType="imms.model.User" keyProperty="userId" useGeneratedKeys="true">
         insert into userinfo
-        values(0,#{userName},#{userNumber},#{userPhoneNumber},#{userPassword},#{userEmail},#{isAdmin})
+        values(0,#{userName},#{userNumber},#{userPhoneNumber},#{userPassword},#{userEmail},#{isAdmin},null)
     </insert>
 
     <!--修改-->

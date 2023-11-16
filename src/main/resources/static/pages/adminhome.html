@@ -28,7 +28,7 @@
       }
     @keyframes main{
         0%{opacity:0.5;}
-        100%{opacity:1;}
+        '100'%{opacity:1;}
     }
 
     .descriptions{
@@ -73,7 +73,7 @@
     .err_msg{
         position:relative;
         top:-18px;
-        left:100px;
+        left:'100'px;
         font-size:13px;
         font-weight:bold;
         color:rgba(194, 75, 11, 0.82);
@@ -225,7 +225,7 @@
                 <el-divider></el-divider>
                 <el-form :inline="true" :model="userConditions" size="mini">
                     <el-form-item label="ID">
-                        <el-input v-model="userConditions.userId" placeholder="用户ID" type="number" style="width:100px"></el-input>
+                        <el-input v-model="userConditions.userId" placeholder="用户ID" type="number" style="width:'100'px"></el-input>
                     </el-form-item>
                     <el-form-item label="姓名">
                         <el-input v-model="userConditions.userName" placeholder="用户姓名" style="width:90px"></el-input>
@@ -357,16 +357,16 @@
                 <el-divider></el-divider>
                 <el-form :inline="true" :model="roomConditions" size="mini">
                     <el-form-item label="ID">
-                        <el-input v-model="roomConditions.roomId" placeholder="会议室ID" type="number" style="width:100px"></el-input>
+                        <el-input v-model="roomConditions.roomId" placeholder="会议室ID" type="number" style="width:'100'px"></el-input>
                     </el-form-item>
                     <el-form-item label="尺寸">
                         <el-input v-model="roomConditions.roomSize" placeholder="会议室尺寸" type=“number” style="width:90px"></el-input>
                     </el-form-item>
                     <el-form-item label="开启时间">
-                        <el-input v-model="roomConditions.roomOpenTime" placeholder="会议室开启时间" type="time" style="width: 100px"></el-input>
+                        <el-input v-model="roomConditions.roomOpenTime" placeholder="会议室开启时间" type="time" style="width: '100'px"></el-input>
                     </el-form-item>
                     <el-form-item label="关闭时间">
-                        <el-input v-model="roomConditions.roomCloseTime" placeholder="会议室关闭时间" type="time" style="width:100px"></el-input>
+                        <el-input v-model="roomConditions.roomCloseTime" placeholder="会议室关闭时间" type="time" style="width:'100'px"></el-input>
                     </el-form-item>
                     <el-form-item label="门牌号">
                         <el-input v-model="roomConditions.roomNumber" placeholder="会议室门牌号" type="number" style="width:120px"></el-input>
@@ -489,10 +489,10 @@
 
            axios({
                method:"get",
-               url:"http://111.229.32.218:8081/users/getSessionUser"
+               url:"http://localhost:8081/admin/curUser"
            }).then(function(resp){
-               _this.currentUser = resp.data;
-               _this.curUserUpdateInfo = Object.assign({},resp.data);
+               _this.currentUser = resp.data.data;
+               _this.curUserUpdateInfo = Object.assign({},resp.data.data);
 
            })
 
@@ -511,55 +511,43 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://111.229.32.218:8081/users/addUSer',
+                       url:'http://localhost:8081/admin/addUser',
                        data:_this.addUserInfo
                    }).then(function(resp){
-                       if(resp.data == "fail"){
+                       if(resp.data.code == '100'){
+                           _this.$message({
+                               type: 'success',
+                               message: '添加成功!新添加的用户的ID为：'+resp.data.data
+                           });
+                           _this.getUserData();
+                           _this.addUserInfo = Object.assign({},{});
+                       }else{
                            _this.$message({
                                type: 'error',
                                message: '添加失败!'
                            });
-                       }else if(resp.data == "empty"){
-                           _this.$message({
-                               type: 'warning',
-                               message: '请输入信息!'
-                           });
-                       }else{
-                           _this.$message({
-                               type: 'success',
-                               message: '添加成功!新添加的用户的ID为：'+resp.data
-                           });
-                           _this.getUserData();
-                           _this.addUserInfo = Object.assign({},{});
                        }
                    })
                })
            },
 
            deleteUser(index,row){
-
                this.$confirm('确定要删除当前用户吗？','提示',{
                    confirmButtonText:'确定',
                    cancelButtonText:'取消',
                }).then(() => {
                    let _this = this;
                    axios({
-                       method:'get',
-                       url:'http://111.229.32.218:8081/users/deleteUser?userId='+row.userId+'&curUserId='+_this.currentUser.userId,
-
+                       method:'post',
+                       url:'http://localhost:8081/admin/deleteUsers',
+                       data:[row.userId]
                    }).then(function(resp){
-                       if(resp.data == "success"){
+                       if(resp.data.code == '100'){
                            _this.$message({
                                type: 'success',
                                message: '成功删除ID为'+row.userId+'的用户！',
                            });
                            _this.getUserData();
-                       }else if(resp.data == "mistake"){
-                           _this.$message({
-                               type: 'warning',
-                               message: '您不能自己删除自己！',
-                           });
-                           return;
                        }else{
                            _this.$message({
                                type: 'error',
@@ -597,13 +585,13 @@
                    let _this = this;
                    axios({
                        method:'post',
-                       url:"http://111.229.32.218:8081/users/deleteUsers",
+                       url:"http://localhost:8081/admin/deleteUsers",
                        data: _this.selectedUserIds
                    }).then(function(resp){
-                       if(resp.data = "success"){
+                       if(resp.data.code = '100'){
                            _this.$message({
                                type: 'success',
-                               message: '批量删除成功！',
+                               message: resp.message
                            });
                            _this.getUserData();
                        }
@@ -619,27 +607,22 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://111.229.32.218:8081/users/editUser',
+                   url:'http://localhost:8081/admin/updateUser',
                    data:_this.editUserInfo,
                }).then(function(resp){
-                   if(resp.data == "success"){
+                   if(resp.data.code == '100'){
                        _this.$message({
                             type: 'success',
-                            message: '修改成功!'
+                            message: resp.message
                        });
-                       _this.getRoomData();
+                       _this.getUserData();
 
-                   }else if(resp.data == "repeated"){
+                   }else{
                        _this.$message({
                             type: 'error',
-                            message: '修改失败!'
+                            message: resp.message
                        });
 
-                   }else if(resp.data == "empty"){
-                       _this.$message({
-                            type: 'warning',
-                            message: '请输入信息!'
-                       });
                    }
                })
            },
@@ -648,10 +631,10 @@
                var _this = this;
                axios({
                    method:"get",
-                   url:"http://111.229.32.218:8081/users/selectAll",
+                   url:"http://localhost:8081/admin/allUsers",
 
                }).then(function(resp){
-                   _this.tableData=resp.data;
+                   _this.tableData=resp.data.data;
                });
 
            },
@@ -665,26 +648,20 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://111.229.32.218:8081/users/editUser',
+                       url:'http://localhost:8081/admin/updateUser',
                        data:_this.curUserUpdateInfo
                    }).then(function(resp){
-                       if(resp.data == "success"){
+                       if(resp.data.code == '100'){
                            _this.$message({
                                type: 'success',
-                               message: '修改成功!'
+                               message: resp.message
                            });
                            _this.currentUser = Object.assign({},_this.curUserUpdateInfo);
 
-                       }else if(resp.data == "fail"){
+                       }else{
                            _this.$message({
                                type: 'info',
-                               message: '修改失败!'
-                           });
-
-                       }else if(resp.data == "empty"){
-                           _this.$message({
-                               type: 'info',
-                               message: '请输入信息!'
+                               message: resp.message
                            });
                        }
                    })
@@ -706,29 +683,23 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://111.229.32.218:8081/users/editUser',
+                       url:'http://localhost:8081/admin/updateUser',
                        data:info
                    }).then(function(resp){
-                       if(resp.data == "success"){
+                       if(resp.data.code == '100'){
                            _this.$message({
                                type: 'success',
-                               message: '修改成功!'
+                               message: resp.message
                            });
                            _this.currentUser = Object.assign({},info);
                            _this.oldPsw = "";
                            _this.newPsw = "";
                            _this.repNewPsw = "";
 
-                       }else if(resp.data == "empty"){
-                           _this.$message({
-                               type: 'info',
-                               message: '请输入信息!'
-                           });
-
                        }else{
                            _this.$message({
                                type: 'info',
-                               message: '修改失败!'
+                               message: resp.message
                            });
                        }
                    });
@@ -765,26 +736,20 @@
                var _this = this;
                axios({
                    method:'post',
-                   url:'http://111.229.32.218:8081/users/select',
+                   url:'http://localhost:8081/admin/selectUser',
                    data:_this.userConditions,
                }).then(function(resp){
-                   if(resp.data == "empty"){
-                       alert("您没有输入条件！");
-                       _this.getUserdata();
-
-                   }else if(resp.data == "notFound"){
+                   if(resp.data.code == '100'){
+                       _this.tableData = resp.data.data;
+                   }else{
                        alert("不好意思，没有符合条件的用户哦！")
                        _this.getUserdata();
-
-                   }else{
-                       _this.tableData = resp.data;
                    }
 
                })
 
            },
 
-           //todo
            addRoom(){
                this.$confirm('确定要添加该会议室吗?', '提示', {
                    confirmButtonText: '确定',
@@ -794,23 +759,18 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://111.229.32.218:8081/rooms/addRoom',
+                       url:'http://localhost:8081/admin/addRoom',
                        data:_this.addRoomInfo
                    }).then(function(resp){
-                       if(resp.data == "repeated"){
+                       if(resp.data.code == '100'){
                            _this.$message({
-                               type: 'error',
-                               message: '添加失败!'
-                           });
-                       }else if(resp.data == "empty"){
-                           _this.$message({
-                               type: 'warning',
-                               message: '请输入信息!'
+                               type: 'success',
+                               message: resp.message
                            });
                        }else{
                            _this.$message({
-                               type: 'success',
-                               message: '添加成功!新添加的会议室的ID为：'+resp.data
+                               type: 'error',
+                               message: resp.message
                            });
                            _this.getRoomData();
                            _this.addRoomInfo = Object.assign({},{});
@@ -826,11 +786,11 @@
                }).then(() => {
                    let _this = this;
                    axios({
-                       method:'get',
-                       url:'http://111.229.32.218:8081/rooms/'+row.roomId,
-
+                       method:'post',
+                       url:'http://localhost:8081/admin/deleteRooms',
+                       data:[row.roomId]
                    }).then(function(resp){
-                       if(resp.data == "success"){
+                       if(resp.data.code == '100'){
                            _this.$message({
                                type: 'success',
                                message: '成功删除ID为'+row.roomId+'的会议室！',
@@ -850,29 +810,22 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://111.229.32.218:8081/rooms/select',
+                   url:'http://localhost:8081/admin/selectRoom',
                    data:_this.roomConditions,
                }).then(function(resp){
-                   if(resp.data == "empty"){
+                   if(resp.data.code == '100'){
                        _this.$message({
-                           type: 'warning',
-                           message: '请输入查询条件！',
+                           type: 'success',
+                           message: resp.message,
                        });
-                       _this.getRoomData();
-
-                   }else if(resp.data == "notFound"){
-                       _this.$message({
-                           type: 'fail',
-                           message: '没有找到符合条件的会议室哦！',
-                       });
-                       _this.getRoomData();
+                       _this.roomData = resp.data.data;
 
                    }else{
                        _this.$message({
-                           type: 'success',
-                           message: '成功找到'+resp.data.length+'条记录！',
+                           type: 'error',
+                           message: resp.message,
                        });
-                       _this.roomData = resp.data;
+                       _this.getRoomData();
                    }
                })
            },
@@ -881,9 +834,9 @@
                let _this = this;
                axios({
                    method:"get",
-                   url:"http://111.229.32.218:8081/rooms/selectAll",
+                   url:"http://localhost:8081/admin/allRooms",
                }).then(function(resp){
-                   _this.roomData=resp.data;
+                   _this.roomData=resp.data.data;
                });
            },
 
@@ -921,20 +874,18 @@
                    let _this = this;
                    axios({
                        method:'post',
-                       url:"http://111.229.32.218:8081/rooms/deleteRooms",
+                       url:"http://localhost:8081/admin/deleteRooms",
                        data: _this.selectedRoomsIds
                    }).then(function(resp){
-                       if(resp.data = "success"){
+                       if(resp.data.code = '100'){
                            _this.$message({
                                type: 'success',
-                               message: '批量删除成功！',
+                               message: resp.message,
                            });
                            _this.getRoomData();
                        }
                    })
                })
-
-
 
            },
 
@@ -942,25 +893,19 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://111.229.32.218:8081/editRoomServlet',
+                   url:'http://localhost:8081/admin/updateRoom',
                    data:_this.editRoomInfo,
                }).then(function(resp){
-                   if(resp.data == "success"){
+                   if(resp.data.code == '100'){
                        _this.$message({
                            type: 'success',
-                           message: '修改成功!'
+                           message: resp.message
                        });
                        _this.getRoomData();
 
-                   }else if(resp.data == "repeated"){
+                   }else{
                        _this.$message({
                            type: 'error',
-                           message: '修改失败!'
-                       });
-
-                   }else if(resp.data == "empty"){
-                       _this.$message({
-                           type: 'warning',
                            message: '请输入信息!'
                        });
                    }

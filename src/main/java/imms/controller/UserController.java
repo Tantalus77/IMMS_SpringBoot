@@ -1,3 +1,4 @@
+
 package imms.controller;
 
 
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/users")
 @CrossOrigin(origins = "*")
 public class UserController {
+    /**
 
     @Autowired
     private UserServiceInterface userServiceInterface;
@@ -174,7 +176,7 @@ public class UserController {
         return user;
 
     }
-
+**/
 
 
 
