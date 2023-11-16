@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="imms.dao.InviteMapper">
+
+    <insert id="addInvite" parameterType="imms.model.Invite">
+        insert into invite
+        values (#{userId},#{inviterId},#{meetingId},#{status});
+    </insert>
+    <update id="updateInvite" parameterType="imms.model.Invite">
+        update invite set status = #{status} where userId = #{userId} and meetingId = #{meetingId};
+    </update>
+</mapper>
