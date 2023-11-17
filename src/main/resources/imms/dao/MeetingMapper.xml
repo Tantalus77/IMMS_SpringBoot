@@ -6,12 +6,13 @@
 
     <insert id="addMeeting" parameterType="imms.model.Meeting" keyProperty="meetingId" useGeneratedKeys="true">
         insert into meeting
-        values (#{meetingId},#{userId},#{date},#{startTime},#{endTime},#{theme},#{introduction},#{needSign},#{code});
+        values (#{meetingId},#{userId},#{roomId},#{date},#{startTime},#{endTime},#{theme},#{introduction},#{needSign},#{code});
     </insert>
 
     <update id="updateMeeting" parameterType="imms.model.Meeting">
         update meeting set
-        meetingId = #{meetingId},
+        userId = #{userId},
+        roomId = #{roomId},
         date = #{date},
         startTime = #{startTime},
         endTime = #{endTime},
@@ -34,6 +35,9 @@
             </if>
             <if test="userId != null ">
                 and userId = #{userId}
+            </if>
+            <if test="roomId != null">
+                roomId = #{roomId}
             </if>
             <if test="date != null &amp; date != ''">
                 and date = #{date}

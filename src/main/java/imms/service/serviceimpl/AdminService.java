@@ -1,11 +1,9 @@
 package imms.service.serviceimpl;
 
 import imms.dao.MeetingMapper;
-import imms.dao.ReserveMapper;
 import imms.dao.RoomMapper;
 import imms.dao.UserMapper;
 import imms.model.Meeting;
-import imms.model.Reserve;
 import imms.model.Room;
 import imms.model.User;
 import imms.service.AdminServiceInterface;
@@ -25,8 +23,6 @@ public class AdminService implements AdminServiceInterface {
     @Autowired
     private MeetingMapper mm;
 
-    @Autowired
-    private ReserveMapper rem;
     @Override
     public boolean loginByEmail(String email, String password) {
         if(email == "" || password == "") {
@@ -175,31 +171,4 @@ public class AdminService implements AdminServiceInterface {
         return true;
     }
 
-    @Override
-    public boolean deleteReserve(List<Integer> reserveIds) {
-        try{
-            for (Integer reserveId:
-                 reserveIds) {
-                rem.deleteReserve(reserveId);
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public List<Reserve> selectReserve(Reserve reserve) {
-        if (reserve == null) {
-            return rem.selectAll();
-        }
-        return rem.select(reserve);
-    }
-
-    @Override
-    public boolean updateReserve(Reserve reserve) {
-        rem.updateReserve(reserve);
-        return true;
-    }
 }

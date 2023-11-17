@@ -3,6 +3,7 @@ package imms.model;
 public class Meeting {
     private Integer meetingId;
     private Integer userId;
+    private Integer roomId;
     private String date;
     private String startTime;
     private String endTime;
@@ -27,6 +28,14 @@ public class Meeting {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Integer getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Integer roomId) {
+        this.roomId = roomId;
     }
 
     public String getDate() {

@@ -70,7 +70,7 @@ public interface MeetingMapper {
 
     /**
      * 通过不确定的条件查询会议
-     * 条件包括：会议id、主持人id、日期、开始时间、结束时间、主题、介绍、是否需要签到、会议码
+     * 条件包括：会议id、会议室id、主持人id、日期、开始时间、结束时间、主题、介绍、是否需要签到、会议码
      * @param meeting
      * @return
      */
@@ -79,14 +79,15 @@ public interface MeetingMapper {
     @Select("select * from meeting where userId = #{userId}")
     List<Meeting> selectByUserId(Integer userId);
 
+    @Select("select * from meeting where roomId = #{roomId}")
+    List<Meeting> selectByRoomId(Integer roomId);
+
     /**
      * 查询某一天某个会议室的所有会议
      * @param roomId
      * @return
      */
-    @Select("SELECT m.meetingId,m.date,m.startTime,m.endTime,m.theme,m.introduction " +
-            "FROM reserve left join meeting m on reserve.meetingId = m.meetingId " +
-            "WHERE reserve.roomId = #{roomId} and m.date = #{date}")
+    @Select("select * from meeting where roomId = #{roomId} and date = #{date}")
     List<Meeting> selectByRoom(int roomId,String date);
 
     /**

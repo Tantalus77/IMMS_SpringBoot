@@ -3,6 +3,7 @@ package imms.service;
 import imms.model.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.List;
 @Transactional
  public interface UserServiceInterface {
@@ -12,7 +13,7 @@ import java.util.List;
      * @param password
      * @return
      */
-     boolean loginByEmail(String email,String password);
+     User loginByEmail(String email,String password);
 
     /**
      * 用户管理自己的个人信息
@@ -41,7 +42,7 @@ import java.util.List;
      * @param meeting
      * @return
      */
-     boolean reserveMeeting(Meeting meeting, Integer roomId);
+     boolean reserveMeeting(Meeting meeting) throws ParseException;
 
     /**
      * 获取用户所有会议，包括主持的和参加的
@@ -140,5 +141,12 @@ import java.util.List;
      * @return
      */
      List<Invite> myInvitations(Integer userId);
+
+    /**
+     * @description: 检查输入的会议时间是否空闲
+     * @param meeting
+     * @return
+     */
+    boolean isAvailableTime(Meeting meeting) throws ParseException;
 
 }

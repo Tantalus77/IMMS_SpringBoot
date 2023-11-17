@@ -114,24 +114,4 @@ import java.util.List;
      */
      boolean updateMeeting(Meeting meeting);
 
-    /**
-     * 删除预约
-     * @param reserveIds
-     * @return
-     */
-     boolean deleteReserve(List<Integer> reserveIds);
-
-    /**
-     * 根据条件搜索预约
-     * @param reserve
-     * @return
-     */
-     List<Reserve> selectReserve(Reserve reserve);
-
-    /**
-     * 根据传入的Reserve更改预约
-     * @param reserve
-     * @return
-     */
-     boolean updateReserve(Reserve reserve);
 }
