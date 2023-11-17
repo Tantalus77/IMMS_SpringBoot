@@ -1,5 +1,7 @@
 package imms.utils;
 
+import java.text.SimpleDateFormat;
+
 public class Code {
     public static final Integer CONNECTION_ERROR = 210;
     public static final Integer UNKNOWN_ERROR = 200;
@@ -10,5 +12,11 @@ public class Code {
     public static final Integer SERVICE_ERROR=220;
 
     public static final String SERVER_IP = "139.155.147.127";
+
+
+    public static String dateCode() {
+        SimpleDateFormat sdf = new SimpleDateFormat("hhhmmssSSSS");
+        return sdf.format(System.currentTimeMillis());
+    }
 
 }

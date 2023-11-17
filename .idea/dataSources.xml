@@ -12,7 +12,7 @@
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://192.168.72.1:3306</jdbc-url>
+      <jdbc-url>jdbc:mysql://192.168.1.104:3306</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="wht" uuid="9b39bd82-0086-42b9-8a8c-a2a83dec47e9">

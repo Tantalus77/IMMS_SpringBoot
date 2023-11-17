@@ -68,4 +68,10 @@ public class Reserve {
                 ", info='" + info + '\'' +
                 '}';
     }
+
+    public Reserve(Integer userId, Integer roomId, Integer meetingId) {
+        this.userId = userId;
+        this.roomId = roomId;
+        this.meetingId = meetingId;
+    }
 }

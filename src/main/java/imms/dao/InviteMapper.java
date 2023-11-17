@@ -33,6 +33,8 @@ public interface InviteMapper {
     @Select("select meetingId from invite where userId = #{userId}")
     List<Integer> selectMeetingIdByUserId(Integer userId);
 
+    @Select("select * from invite where userId = #{userId} && meetingId = #{meetingId}")
+    List<Invite> selectByUserIdAndByMeetingId(Integer userId, Integer meetingId);
     /**
      * 只允许修改状态
      * @param invite

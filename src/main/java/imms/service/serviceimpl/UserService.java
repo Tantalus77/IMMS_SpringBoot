@@ -1,15 +1,15 @@
 package imms.service.serviceimpl;
 
-import imms.dao.UserMapper;
-import imms.model.Invite;
-import imms.model.Meeting;
-import imms.model.Room;
-import imms.model.User;
+import imms.dao.*;
+import imms.model.*;
 import imms.service.UserServiceInterface;
+import imms.utils.Code;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Date;
 
 /**
  * @author 普朗千克
@@ -22,6 +22,20 @@ public class UserService implements UserServiceInterface {
     @Autowired
     private UserMapper um;
 
+    @Autowired
+    private ParticipateMapper pm;
+
+    @Autowired
+    private MeetingMapper mm;
+
+    @Autowired
+    private RoomMapper rm;
+
+    @Autowired
+    private ReserveMapper rem;
+
+    @Autowired
+    private InviteMapper im;
 
     /**
      * @description: TODO 用户通过邮箱登录
@@ -31,7 +45,16 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean loginByEmail(String email, String password) {
-        return false;
+        if(email == "" || password == "") {
+            return false;
+        }
+        User user = um.selectByEmail(email);
+        if(user == null) {
+            return false;
+        }
+        //判断用户输入邮箱对应的用户的密码是否等于用户输入的密码
+        //同时忽略用户输入密码前后的空格
+        return user.getUserPassword().equals(password.trim());
     }
 
     /**
@@ -41,7 +64,14 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean editInfo(User user) {
-        return false;
+        if(user.getUserId() == 0) return false;
+        try{
+            um.updateUser(user);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -51,8 +81,15 @@ public class UserService implements UserServiceInterface {
      * @return
      */
     @Override
-    public boolean setPictureInfo(String picAddress) {
-        return false;
+    public boolean setPicture(Integer userId,String picAddress) {
+        if(picAddress == null) return false;
+        try{
+            um.setPicture(userId,picAddress);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -68,7 +105,15 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean reserveMeeting(Meeting meeting, Integer roomId) {
-        return false;
+        String code = Code.dateCode();
+        meeting.setCode(code);
+        Integer meetingId = mm.addMeeting(meeting);
+
+        Reserve reserve = new Reserve(meeting.getUserId(), roomId, meetingId);
+        rem.addReserve(reserve);
+
+        pm.addParticipant(meetingId, meeting.getUserId());
+        return true;
     }
 
     /**
@@ -79,7 +124,8 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public List<Meeting> myMeetings(Integer userId) {
-        return null;
+        List<Meeting> meetings = pm.selectMeetings(userId);
+        return meetings;
     }
 
     /**
@@ -90,7 +136,8 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public List<Meeting> myOrganizedMeeting(Integer userId) {
-        return null;
+        List<Meeting> meetings = mm.selectByUserId(userId);
+        return meetings;
     }
 
     /**
@@ -101,7 +148,12 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public List<Meeting> historyMeetings(Integer userId) {
-        return null;
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = formatter.format(date);
+
+        List<Meeting> meetings = mm.selectByTime(dateStr);
+        return meetings;
     }
 
     /**
@@ -114,8 +166,12 @@ public class UserService implements UserServiceInterface {
      * @return
      */
     @Override
-    public boolean attendMeetingByCode(Integer userId, Integer code) {
-        return false;
+    public boolean attendMeetingByCode(Integer userId, String code) {
+        Meeting meeting = mm.selectByCode(code);
+        Integer meetingId = meeting.getMeetingId();
+
+        pm.addParticipant(meetingId, userId);
+        return true;
     }
 
     /**
@@ -126,26 +182,32 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean register(String email, String password) {
-        return false;
+        User user = new User();
+        user.setUserEmail(email);
+        user.setUserPassword(password);
+        um.addUser(user);
+        return true;
     }
 
     /**
-     * @description： TODO 向用户展示系统中所有的会议室
      * @return
+     * @description： TODO 向用户展示系统中所有的会议室
      */
     @Override
-    public boolean allRooms() {
-        return false;
+    public List<Room> allRooms() {
+        List<Room> rooms = rm.selectAll();
+        return rooms;
     }
 
     /**
-     * @description： TODO 用户查询需要的会议室
      * @param room
      * @return
+     * @description： TODO 用户查询需要的会议室
      */
     @Override
-    public boolean selectRooms(Room room) {
-        return false;
+    public List<Room> selectRooms(Room room) {
+        List<Room> roomReturn = rm.selectRoom(room);
+        return roomReturn;
     }
 
     /**
@@ -154,8 +216,15 @@ public class UserService implements UserServiceInterface {
      * @return
      */
     @Override
-    public boolean invite(Integer userId,Integer InviterId,Integer meetingId) {
-        return false;
+    public boolean invite(Integer userId,Integer inviteId,Integer meetingId) {
+        Invite invite = new Invite(userId, inviteId, meetingId);
+        try {
+            im.addInvite(invite);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -166,7 +235,21 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean agree(Integer userId, Integer meetingId) {
-        return false;
+        List<Invite> invites = im.selectByUserIdAndByMeetingId(userId, meetingId);
+
+        try {
+            for(int i = 0; i < invites.size(); i++){
+                Invite invite = invites.get(i);
+                invite.setStatus(1);
+                im.updateInvite(invite);
+            }
+            pm.addParticipant(meetingId, userId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -176,7 +259,10 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean agree(Invite invite) {
-        return false;
+        invite.setStatus(1);
+        im.updateInvite(invite);
+        pm.addParticipant(invite.getMeetingId(), invite.getUserId());
+        return true;
     }
 
     /**
@@ -187,6 +273,19 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean reject(Integer userId, Integer meetingId) {
+        List<Invite> invites = im.selectByUserIdAndByMeetingId(userId, meetingId);
+
+        try {
+            for(int i = 0; i < invites.size(); i++){
+                Invite invite = invites.get(i);
+                invite.setStatus(2);
+                im.updateInvite(invite);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return false;
     }
 
@@ -197,7 +296,9 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean reject(Invite invite) {
-        return false;
+        invite.setStatus(2);
+        im.updateInvite(invite);
+        return true;
     }
 
     /**
@@ -207,7 +308,8 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public List<Invite> myInvitations(Integer userId) {
-        return null;
+        List<Invite> invites = im.selectByUserId(userId);
+        return invites;
     }
 }
 

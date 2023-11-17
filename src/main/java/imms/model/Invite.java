@@ -38,4 +38,11 @@ public class Invite {
         this.status = status;
     }
 
+    public Invite(Integer userId, Integer inviterId, Integer meetingId){
+        this.userId = userId;
+        this.inviterId = inviterId;
+        this.meetingId = meetingId;
+        this.status = 0;
+    }
+
 }

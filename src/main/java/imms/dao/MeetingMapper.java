@@ -20,6 +20,7 @@ import java.util.List;
  *  6.使用会议码查询会议
  *  7.不确定条件查询会议
  *  8.查询某个会议室的所有会议
+ *  9.使用当前时间查询历史会议
  */
 @Mapper
 public interface MeetingMapper {
@@ -75,6 +76,9 @@ public interface MeetingMapper {
      */
     List<Meeting> select(Meeting meeting);
 
+    @Select("select * from meeting where userId = #{userId}")
+    List<Meeting> selectByUserId(Integer userId);
+
     /**
      * 查询某一天某个会议室的所有会议
      * @param roomId
@@ -84,4 +88,12 @@ public interface MeetingMapper {
             "FROM reserve left join meeting m on reserve.meetingId = m.meetingId " +
             "WHERE reserve.roomId = #{roomId} and m.date = #{date}")
     List<Meeting> selectByRoom(int roomId,String date);
+
+    /**
+     * 查询某一天某个会议室的所有会议
+     * @param date
+     * @return
+     */
+    @Select("select * from meeting where meeting.date <= #{date}")
+    List<Meeting> selectByTime(String date);
 }

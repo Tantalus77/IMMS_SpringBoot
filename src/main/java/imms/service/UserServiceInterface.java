@@ -27,7 +27,7 @@ import java.util.List;
      * @param picAddress
      * @return
      */
-     boolean setPictureInfo(String picAddress);
+     boolean setPicture(Integer userId, String picAddress);
 
     /**
      * 预定会议
@@ -70,7 +70,8 @@ import java.util.List;
      * 要求用code找到会议id
      * @return
      */
-     boolean attendMeetingByCode(Integer userId, Integer code);
+
+    boolean attendMeetingByCode(Integer userId, String code);
 
     /**
      * 使用邮箱注册
@@ -82,16 +83,18 @@ import java.util.List;
 
     /**
      * 向用户展示当前所有会议室
+     *
      * @return
      */
-     boolean allRooms();
+     List<Room> allRooms();
 
     /**
      * 搜索会议，预期通过尺寸、时间、地址搜索会议室
+     *
      * @param room
      * @return
      */
-     boolean selectRooms(Room room);
+     List<Room> selectRooms(Room room);
 
     /**
      * 邀请某位用户参加会议
