@@ -16,6 +16,7 @@ import static imms.utils.Code.*;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin
 public class AdminController {
     @Autowired
     private AdminServiceInterface adminService;
