@@ -2,18 +2,31 @@ package imms.model;
 
 public class Meeting {
     private Integer meetingId;
+    private Integer userId;
     private String date;
     private String startTime;
     private String endTime;
     private String theme;
     private String introduction;
 
+    //0：不需要签到 1：需要签到
+    private Integer needSign;
+    private String code;
+
     public Integer getMeetingId() {
         return meetingId;
     }
 
-    public void setMeetingID(Integer meetingId) {
+    public void setMeetingId(Integer meetingId) {
         this.meetingId = meetingId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getDate() {
@@ -54,6 +67,22 @@ public class Meeting {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public Integer getNeedSign() {
+        return needSign;
+    }
+
+    public void setNeedSign(Integer needSign) {
+        this.needSign = needSign;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Override

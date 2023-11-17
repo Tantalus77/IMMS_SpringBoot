@@ -1,9 +1,6 @@
 package imms.service;
 
-import imms.model.Meeting;
-import imms.model.Reserve;
-import imms.model.Room;
-import imms.model.User;
+import imms.model.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -34,18 +31,17 @@ import java.util.List;
 
     /**
      * 预定会议
-     * 用户预期输入主题、日期、时间范围、简介、是否签到、参与者
+     * 用户预期输入主题、日期、时间范围、简介、是否签到
      * reserve中的字段有：预约者、房间id、会议id
-     * meeting中的字段有：日期、开始时间、结束时间、主题、简介、是否签到
+     * meeting中的字段有：主持人、日期、开始时间、结束时间、主题、简介、是否签到、会议码
      * 这个服务就把会议添加到数据库中，添加时也生成一个会议code，并且自动生成一个reserve，同样放到数据库里，
      * 然后同时也在participate表里添加一条记录，即主持会议就等于参加了该会议
-     * 要求前端给出邀请用户的Id，然后这个方法里就把它加入到数据库invite表里去
      * invite表待设计
      * @param
      * @param meeting
      * @return
      */
-     boolean reserveMeeting(Meeting meeting, List<Integer> userIds);
+     boolean reserveMeeting(Meeting meeting, Integer roomId);
 
     /**
      * 获取用户所有会议，包括主持的和参加的
@@ -103,8 +99,43 @@ import java.util.List;
      * @param userId
      * @return
      */
-     boolean invite(Integer userId);
+     boolean invite(Integer userId,Integer inviterId,Integer meetingId);
 
+    /**
+     * 用户同意某个会议的邀请
+     * @param userId
+     * @param meetingId
+     * @return
+     */
+     boolean agree(Integer userId,Integer meetingId);
 
+    /**
+     * 用户同意某个会议的邀请
+     * @param invite
+     * @return
+     */
+     boolean agree(Invite invite);
+
+    /**
+     * 用户拒绝某个会议的邀请
+     * @param userId
+     * @param meetingId
+     * @return
+     */
+     boolean reject(Integer userId,Integer meetingId);
+
+    /**
+     * 用户拒绝某个会议的邀请
+     * @param invite
+     * @return
+     */
+     boolean reject(Invite invite);
+
+    /**
+     * 获取某个用户的所有邀请（这个用户是被邀请的）
+     * @param userId
+     * @return
+     */
+     List<Invite> myInvitations(Integer userId);
 
 }

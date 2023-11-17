@@ -1,5 +1,6 @@
 package imms.model;
 
+
 public class Invite {
     private Integer userId;
     private Integer inviterId;
@@ -17,7 +18,6 @@ public class Invite {
     public Integer getInviterId() {
         return inviterId;
     }
-
     public void setInviterId(Integer inviterId) {
         this.inviterId = inviterId;
     }

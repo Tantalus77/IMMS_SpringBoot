@@ -1,13 +1,22 @@
 package imms.model;
 
 public class User {
-    private Integer userId = 0;
-    private String userName = "";
-    private String userNumber = "";
-    private String userPhoneNumber = "";
-    private String userPassword = "";
-    private String userEmail = "";
-    private int isAdmin = 0;
+    private Integer userId;
+    private String userName;
+    private String userNumber;
+    private String userPhoneNumber;
+    private String userPassword ;
+    private String userEmail;
+    private int isAdmin ;
+    private String picture;
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
 
     public Integer getUserId() {
         return userId;

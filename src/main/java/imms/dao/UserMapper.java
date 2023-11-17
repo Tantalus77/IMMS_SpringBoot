@@ -7,48 +7,77 @@ import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
+/**
+ * @author 普朗千克
+ * @2023/11/17 11:43 update
+ * 用户相关的数据库操作，使用时最好看一下注释
+ */
 @Mapper
 public interface UserMapper {
 
     /**
-     * 查询相关的方法，包含8个方法：
-     * 1.查询所有用户；
-     * 2.通过id（精确）查询用户 @param userId
-     * 3.通过名字（模糊）查询用户@param userName
-     * 4.通过邮箱（精确）查询用户@param userEmail
-     * 5.通过手机号（精确）查询用户@param userPhoneNumber
-     * 6.通过内部号（精确）查询用户@param userNumber
-     * 7.通过不确定的条件查询用户@param User
-     * 8.通过不确定的条件查询用户，忽略userName@param User
+     * 获取系统中所有用户
+     * @return
      */
-    //查询所有用户
     @Select("select * from userinfo")
     List<User> selectAll();
 
-    //通过id查询用户
+    /**
+     * 通过Id查询用户
+     * @param userId
+     * @return
+     */
     @Select("select * from userinfo where userId = #{userId}")
     User selectById(Integer userId);
 
-    //通过名字查询用户
-    @Select("select * from userinfo where username like #{username}")
+    /**
+     * 通过姓名查询用户
+     * @param userName
+     * @return
+     */
+    @Select("select * from userinfo where username = #{username}")
     List<User> selectByName(String userName);
 
-    //通过Email查询用户
+    /**
+     * 通过邮箱查询用户
+     * @param userEmail
+     * @return
+     */
     @Select("select * from userinfo where userEmail = #{userEmail}")
     User selectByEmail(String userEmail);
 
-    //通过手机号查询用户
+    /**
+     * 通过手机号查询用户
+     * @param userPhoneNumber
+     * @return
+     */
     @Select("select * from userinfo where userPhoneNumber = #{userPhoneNumber}")
     User selectByPhoneNumber(String userPhoneNumber);
 
-    //通过内部号查询用户
+    /**
+     * 通过用户内部号查询用户
+     * @param userNumber
+     * @return
+     */
     @Select("select * from userinfo where userNumber = #{userNumber}")
     User selectByNumber(String userNumber);
 
-    //在不确定用户输入哪些值的情况下查询用户
+    /**
+     * 通过用户输入的条件查询用户
+     * 条件包括：用户id、用户姓名、用户手机号、用户邮箱、用户内部号、是否是管理员
+     * 其中用户姓名、手机号、邮箱、内部号均为模糊查询
+     * @param user
+     * @return
+     */
     List<User> select(User user);
 
-    //忽略userName
+    /**
+     * 查找条件包括：邮箱、手机号、内部号，均为精确查询
+     * 注册时检查用户的注册信息或者更改信息是否重复，
+     * 因为姓名是允许重复的，所以这个方法并不使用姓名查询
+     * @param user
+     * @return
+     */
     List<User> check(User user);
 
     /**
@@ -76,6 +105,12 @@ public interface UserMapper {
      */
     void deleteUser(int userId);
 
+
+    /**
+     * 修改头像，是一个单独的方法
+     * @param userId
+     * @param picAddress
+     */
     @Update("update user set picture = #{picAddress} where userId = #{userId} ")
     void setPicture(Integer userId, String picAddress);
 

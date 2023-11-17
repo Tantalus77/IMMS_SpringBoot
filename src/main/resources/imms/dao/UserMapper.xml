@@ -35,17 +35,14 @@
     <select id="check" resultType="imms.model.User">
         select * from userinfo
         <where>
-            <if test="userId!=null &amp; userId!= 0 ">
-                userId = #{userId}
-            </if>
             <if test="userNumber != null &amp; userNumber!='' ">
-                AND userNumber like #{userNumber}
+                AND userNumber = #{userNumber}
             </if>
             <if test="userPhoneNumber != null &amp; userPhoneNumber != ''">
-                AND userPhoneNumber like #{userPhoneNumber}
+                AND userPhoneNumber = #{userPhoneNumber}
             </if>
             <if test="userEmail != null &amp; userEmail != '' ">
-                AND userEmail like #{userEmail}
+                AND userEmail = #{userEmail}
             </if>
 
         </where>
