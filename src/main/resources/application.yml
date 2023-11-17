@@ -1,12 +1,5 @@
 
-server:
-  port: 8081
-  address: 0.0.0.0
-
 spring:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost/immstest?useSSL=false
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: tyq030420!
+  profiles:
+    active: dev
+

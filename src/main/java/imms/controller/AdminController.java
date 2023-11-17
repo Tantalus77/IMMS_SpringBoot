@@ -6,7 +6,6 @@ import imms.model.Room;
 import imms.model.User;
 import imms.service.AdminServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +32,7 @@ public class AdminController {
             session.removeAttribute("User");//先把之前的session对应的值去掉
             session.setAttribute("User", currentUser);//写入session
 
-            return new Result(DAO_SUCCESS,null,"管理员登陆成功！");
+            return new Result(DAO_SUCCESS,currentUser,"管理员登陆成功！");
 
         }else{
             return new Result(SELECT_ERROR,null,"不存在该账户或你不是管理员！");
