@@ -16,7 +16,7 @@ import static imms.utils.Code.*;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin
+@CrossOrigin(originPatterns = "*", allowCredentials = "true")
 public class AdminController {
     @Autowired
     private AdminServiceInterface adminService;
