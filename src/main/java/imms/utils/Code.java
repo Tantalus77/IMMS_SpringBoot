@@ -14,9 +14,6 @@ public class Code {
     public static final String SERVER_IP = "139.155.147.127";
 
 
-    public static String dateCode() {
-        SimpleDateFormat sdf = new SimpleDateFormat("hhhmmssSSSS");
-        return sdf.format(System.currentTimeMillis());
-    }
+
 
 }

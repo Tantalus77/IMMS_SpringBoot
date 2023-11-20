@@ -1,5 +1,6 @@
 package imms.utils;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 
 public class Utils {
@@ -21,5 +22,10 @@ public class Utils {
             LocalTime rightTime = LocalTime.of(hour,min);
             return rightTime;
         }
+    }
+
+    public static String dateCode() {
+        SimpleDateFormat sdf = new SimpleDateFormat("hhhmmssSSSS");
+        return sdf.format(System.currentTimeMillis());
     }
 }

@@ -3,7 +3,7 @@ package imms.service.serviceimpl;
 import imms.dao.*;
 import imms.model.*;
 import imms.service.UserServiceInterface;
-import imms.utils.Code;
+import imms.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,7 +105,7 @@ public class UserService implements UserServiceInterface {
         if(!isAvailableTime(meeting)){
             return false;
         }
-        String code = Code.dateCode();
+        String code = Utils.dateCode();
         meeting.setCode(code);
         Integer meetingId = mm.addMeeting(meeting);
 
