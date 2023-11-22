@@ -35,7 +35,7 @@ public class UserController {
         }
     }
 
-    // 管理个人信息1
+    // 管理个人信息
     @PostMapping("/editInfo")
     public Result userEdit(@RequestBody User user) {
         boolean flag =userServicer.editInfo(user);
@@ -47,7 +47,7 @@ public class UserController {
         }
     }
 
-    // 修改头像,
+    // 修改头像
     @Value("${file.upload-path}")
     private String imgUrl;
     @ApiOperation(value = "返回前端发送来的图片")
@@ -76,8 +76,7 @@ public class UserController {
         return new Result(210,null,"图片修改失败！");
     }
 
-
-    // 预定会议1
+    // 预定会议
     @PostMapping("/reserveMeeting")
     public Result reserveMeeting(@RequestBody Meeting meeting) throws ParseException {
         boolean flag = userServicer.reserveMeeting(meeting);
@@ -121,7 +120,7 @@ public class UserController {
         }
     }
 
-    // 通过会议码参加会议1
+    // 通过会议码参加会议
     @GetMapping("/attend")
     public Result attend(@RequestBody Invite invite){
        boolean flag = userServicer.attendMeetingByCode(invite.getUserId(), String.valueOf(invite.getMeetingId()));
@@ -132,7 +131,7 @@ public class UserController {
         }
     }
 
-    // 通过邮箱注册1
+    // 通过邮箱注册
     @GetMapping("/register")
     public Result register(@RequestBody Email email){
         boolean flag = userServicer.register(email.getEmail(), email.getPassword());
@@ -167,7 +166,7 @@ public class UserController {
     }
 
 
-    // 邀请参会1
+    // 邀请参会
     @GetMapping("/invite")
     public Result invite(@RequestBody Invite inviter){
         boolean flag = userServicer.invite(inviter.getUserId(), inviter.getInviterId(), inviter.getMeetingId());
@@ -178,7 +177,7 @@ public class UserController {
         }
     }
 
-    // 同意参会1
+    // 同意参会
     @GetMapping("/agree")
     public Result agree(@RequestBody Invite inviter){
         boolean flag = userServicer.agree(inviter.getUserId(), inviter.getMeetingId());
@@ -190,7 +189,7 @@ public class UserController {
     }
 
 
-    // 拒绝参会1
+    // 拒绝参会
     @GetMapping("/reject")
     public Result reject(@RequestBody Invite inviter){
         boolean flag = userServicer.reject(inviter.getUserId(), inviter.getMeetingId());
@@ -214,7 +213,7 @@ public class UserController {
     }
 
 
-    // 会议时间可行1
+    // 会议时间可行
     @PostMapping("/isAvailableTime")
     public Result isAvailableTime(@RequestBody Meeting meeting) throws ParseException {
         boolean flag = userServicer.isAvailableTime(meeting);
