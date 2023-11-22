@@ -30,7 +30,7 @@ public interface MeetingMapper {
      * @param meeting
      * @return
      */
-    Integer addMeeting(Meeting meeting);
+    void addMeeting(Meeting meeting);
 
     /**
      * 通过meetingId删除某个会议

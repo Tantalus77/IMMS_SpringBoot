@@ -28,7 +28,7 @@
       }
     @keyframes main{
         0%{opacity:0.5;}
-        '100'%{opacity:1;}
+        100%{opacity:1;}
     }
 
     .descriptions{
@@ -73,7 +73,7 @@
     .err_msg{
         position:relative;
         top:-18px;
-        left:'100'px;
+        left:100px;
         font-size:13px;
         font-weight:bold;
         color:rgba(194, 75, 11, 0.82);
@@ -225,7 +225,7 @@
                 <el-divider></el-divider>
                 <el-form :inline="true" :model="userConditions" size="mini">
                     <el-form-item label="ID">
-                        <el-input v-model="userConditions.userId" placeholder="用户ID" type="number" style="width:'100'px"></el-input>
+                        <el-input v-model="userConditions.userId" placeholder="用户ID" type="number" style="width:100px"></el-input>
                     </el-form-item>
                     <el-form-item label="姓名">
                         <el-input v-model="userConditions.userName" placeholder="用户姓名" style="width:90px"></el-input>
@@ -357,16 +357,16 @@
                 <el-divider></el-divider>
                 <el-form :inline="true" :model="roomConditions" size="mini">
                     <el-form-item label="ID">
-                        <el-input v-model="roomConditions.roomId" placeholder="会议室ID" type="number" style="width:'100'px"></el-input>
+                        <el-input v-model="roomConditions.roomId" placeholder="会议室ID" type="number" style="width:100px"></el-input>
                     </el-form-item>
                     <el-form-item label="尺寸">
                         <el-input v-model="roomConditions.roomSize" placeholder="会议室尺寸" type=“number” style="width:90px"></el-input>
                     </el-form-item>
                     <el-form-item label="开启时间">
-                        <el-input v-model="roomConditions.roomOpenTime" placeholder="会议室开启时间" type="time" style="width: '100'px"></el-input>
+                        <el-input v-model="roomConditions.roomOpenTime" placeholder="会议室开启时间" type="time" style="width: 100px"></el-input>
                     </el-form-item>
                     <el-form-item label="关闭时间">
-                        <el-input v-model="roomConditions.roomCloseTime" placeholder="会议室关闭时间" type="time" style="width:'100'px"></el-input>
+                        <el-input v-model="roomConditions.roomCloseTime" placeholder="会议室关闭时间" type="time" style="width:100px"></el-input>
                     </el-form-item>
                     <el-form-item label="门牌号">
                         <el-input v-model="roomConditions.roomNumber" placeholder="会议室门牌号" type="number" style="width:120px"></el-input>
@@ -445,6 +445,9 @@
 </div>
 
 <script>
+    const server = "localhost";
+    const port = ":8080";
+    
     new Vue({
         el:"#app",
         data() {
@@ -489,7 +492,7 @@
 
            axios({
                method:"get",
-               url:"http://localhost:8081/admin/curUser"
+               url:"http://"+server+port+"/admin/curUser"
            }).then(function(resp){
                _this.currentUser = resp.data.data;
                _this.curUserUpdateInfo = Object.assign({},resp.data.data);
@@ -511,7 +514,7 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://localhost:8081/admin/addUser',
+                       url:'http://'+server+port+'/admin/addUser',
                        data:_this.addUserInfo
                    }).then(function(resp){
                        if(resp.data.code == '100'){
@@ -539,7 +542,7 @@
                    let _this = this;
                    axios({
                        method:'post',
-                       url:'http://localhost:8081/admin/deleteUsers',
+                       url:'http://'+server+port+'/admin/deleteUsers',
                        data:[row.userId]
                    }).then(function(resp){
                        if(resp.data.code == '100'){
@@ -585,7 +588,7 @@
                    let _this = this;
                    axios({
                        method:'post',
-                       url:"http://localhost:8081/admin/deleteUsers",
+                       url:"http://"+server+port+"/admin/deleteUsers",
                        data: _this.selectedUserIds
                    }).then(function(resp){
                        if(resp.data.code = '100'){
@@ -607,7 +610,7 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://localhost:8081/admin/updateUser',
+                   url:'http://'+server+port+'/admin/updateUser',
                    data:_this.editUserInfo,
                }).then(function(resp){
                    if(resp.data.code == '100'){
@@ -631,7 +634,7 @@
                var _this = this;
                axios({
                    method:"get",
-                   url:"http://localhost:8081/admin/allUsers",
+                   url:"http://"+server+port+"/admin/allUsers",
 
                }).then(function(resp){
                    _this.tableData=resp.data.data;
@@ -648,7 +651,7 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://localhost:8081/admin/updateUser',
+                       url:'http://'+server+port+'/admin/updateUser',
                        data:_this.curUserUpdateInfo
                    }).then(function(resp){
                        if(resp.data.code == '100'){
@@ -683,7 +686,7 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://localhost:8081/admin/updateUser',
+                       url:'http://'+server+port+'/admin/updateUser',
                        data:info
                    }).then(function(resp){
                        if(resp.data.code == '100'){
@@ -736,7 +739,7 @@
                var _this = this;
                axios({
                    method:'post',
-                   url:'http://localhost:8081/admin/selectUser',
+                   url:'http://'+server+port+'/admin/selectUser',
                    data:_this.userConditions,
                }).then(function(resp){
                    if(resp.data.code == '100'){
@@ -759,7 +762,7 @@
                    //发送异步请求
                    axios({
                        method:'post',
-                       url:'http://localhost:8081/admin/addRoom',
+                       url:'http://'+server+port+'/admin/addRoom',
                        data:_this.addRoomInfo
                    }).then(function(resp){
                        if(resp.data.code == '100'){
@@ -787,7 +790,7 @@
                    let _this = this;
                    axios({
                        method:'post',
-                       url:'http://localhost:8081/admin/deleteRooms',
+                       url:'http://'+server+port+'/admin/deleteRooms',
                        data:[row.roomId]
                    }).then(function(resp){
                        if(resp.data.code == '100'){
@@ -810,7 +813,7 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://localhost:8081/admin/selectRoom',
+                   url:'http://'+server+port+'/admin/selectRoom',
                    data:_this.roomConditions,
                }).then(function(resp){
                    if(resp.data.code == '100'){
@@ -834,7 +837,7 @@
                let _this = this;
                axios({
                    method:"get",
-                   url:"http://localhost:8081/admin/allRooms",
+                   url:"http://"+server+port+"/admin/allRooms",
                }).then(function(resp){
                    _this.roomData=resp.data.data;
                });
@@ -874,7 +877,7 @@
                    let _this = this;
                    axios({
                        method:'post',
-                       url:"http://localhost:8081/admin/deleteRooms",
+                       url:"http://"+server+port+"/admin/deleteRooms",
                        data: _this.selectedRoomsIds
                    }).then(function(resp){
                        if(resp.data.code = '100'){
@@ -893,7 +896,7 @@
                let _this = this;
                axios({
                    method:'post',
-                   url:'http://localhost:8081/admin/updateRoom',
+                   url:'http://'+server+port+'/admin/updateRoom',
                    data:_this.editRoomInfo,
                }).then(function(resp){
                    if(resp.data.code == '100'){

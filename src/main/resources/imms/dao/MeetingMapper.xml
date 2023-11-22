@@ -6,7 +6,7 @@
 
     <insert id="addMeeting" parameterType="imms.model.Meeting" keyProperty="meetingId" useGeneratedKeys="true">
         insert into meeting
-        values (#{meetingId},#{userId},#{roomId},#{date},#{startTime},#{endTime},#{theme},#{introduction},#{needSign},#{code});
+        values (0,#{userId},#{roomId},#{date},#{startTime},#{endTime},#{theme},#{introduction},#{needSign},#{code});
     </insert>
 
     <update id="updateMeeting" parameterType="imms.model.Meeting">

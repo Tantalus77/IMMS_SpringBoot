@@ -8,23 +8,23 @@
     <select id="selectRoom" resultType="imms.model.Room">
         select * from roominfo
         <where>
-            <if test="roomId!=null &amp; roomId!=-1 ">
+            <if test="roomId!=null &amp; roomId!=0 ">
                 roomId = #{roomId}
             </if>
-            <if test="roomSize != null &amp; roomSize != -1">
+            <if test="roomSize!=null &amp; roomSize!=0">
                 AND roomSize >= #{roomSize}
             </if>
-            <if test="roomOpenTime != null &amp; roomOpenTime!='' ">
+            <if test="roomOpenTime != null &amp; roomOpenTime!='' &amp; roomOpenTime!= 'null' ">
                 AND roomOpenTime &lt;= #{roomOpenTime}
             </if>
-            <if test="roomCloseTime != null &amp; roomCloseTime != ''">
+            <if test="roomCloseTime != null &amp; roomCloseTime != '' &amp; roomCloseTime != 'null' ">
                 AND roomCloseTime &gt;= #{roomCloseTime}
             </if>
-            <if test="roomNumber != null &amp; roomNumber != ''  ">
-                AND roomNumber like #{roomNumber}
+            <if test="roomNumber != null &amp; roomNumber != '' &amp; roomNumber!= 'null' ">
+                AND roomNumber like CONCAT('%',CONCAT(#{roomNumber},'%'))
             </if>
-            <if test="roomAddress != null &amp; roomAddress != ''">
-                AND roomAddress like #{roomAddress}
+            <if test="roomAddress != null &amp; roomAddress != '' &amp; roomAddress!= 'null' ">
+                AND roomAddress like CONCAT('%',CONCAT(#{roomAddress},'%'))
             </if>
 
         </where>

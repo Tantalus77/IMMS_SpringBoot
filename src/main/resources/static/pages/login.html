@@ -111,6 +111,8 @@
     </el-container>
 </div>
 <script>
+    const server = 'localhost';
+    const port = ':8080'
     new Vue({
         el: '#app',
         data(){
@@ -140,7 +142,7 @@
                 let _this=this;
                 axios({
                     method:"post",
-                    url:"http://localhost:8081/admin/loginByEmail",
+                    url:"http://"+server+port+"/admin/loginByEmail",
                     data:_this.userLoginData
                 }).then(function(resp){
                     if(resp.data.code == '100'){

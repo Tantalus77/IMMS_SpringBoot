@@ -1,12 +1,12 @@
 package imms.model;
 
 public class Room {
-    private Integer roomId = -1;
-    private int roomSize = -1;
-    private String roomOpenTime = "";
-    private String roomCloseTime = "";
-    private String roomNumber = "";
-    private String roomAddress ="";
+    private Integer roomId;
+    private int roomSize;
+    private String roomOpenTime;
+    private String roomCloseTime;
+    private String roomNumber;
+    private String roomAddress;
 
 
     public int getRoomId() {

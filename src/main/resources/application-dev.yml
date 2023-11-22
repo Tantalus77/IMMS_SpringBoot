@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://111.229.32.218:3306/immstest?useSSL=false
+    url: jdbc:mysql://localhost:3306/immstest?useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: imms-test
-    password: test
+    username: root
+    password: tyq030420!

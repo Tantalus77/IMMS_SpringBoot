@@ -4,17 +4,19 @@ package imms.controller;
 
 import imms.model.*;
 import imms.service.UserServiceInterface;
+import static imms.utils.Code.*;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;// 用于对前端图片的接受
-import io.swagger.annotations.ApiOperation;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/user")
@@ -26,10 +28,10 @@ public class UserController {
 
     // 用户邮箱登录
     @PostMapping("/loginByEmail")
-    public Result userlogin(@RequestBody Email email) {
-        User user = userServicer.loginByEmail(email.getEmail(), email.getPassword());
-        if (user != null) {
-            return new Result(100, user, "登录成功！");
+    public Result userlogin(@RequestBody User user) {
+        User curUser = userServicer.loginByEmail(user.getUserEmail(), user.getUserPassword());
+        if (curUser != null) {
+            return new Result(100, curUser, "登录成功！");
         } else {
             return new Result(213, null, "邮箱或密码错误");
         }
@@ -122,8 +124,8 @@ public class UserController {
 
     // 通过会议码参加会议
     @GetMapping("/attend")
-    public Result attend(@RequestBody Invite invite){
-       boolean flag = userServicer.attendMeetingByCode(invite.getUserId(), String.valueOf(invite.getMeetingId()));
+    public Result attend(@RequestParam Integer userId, @RequestParam String meetingId){
+       boolean flag = userServicer.attendMeetingByCode(userId, meetingId);
         if(flag){
             return new Result(100,null,"加入成功！");
         }else {
@@ -132,9 +134,9 @@ public class UserController {
     }
 
     // 通过邮箱注册
-    @GetMapping("/register")
-    public Result register(@RequestBody Email email){
-        boolean flag = userServicer.register(email.getEmail(), email.getPassword());
+    @PostMapping("/register")
+    public Result register(@RequestBody User user){
+        boolean flag = userServicer.register(user.getUserEmail(), user.getUserPassword());
         if(flag){
             return new Result(100,null,"注册成功！");
         }else {
@@ -156,6 +158,7 @@ public class UserController {
     // 查询会议室
     @PostMapping("/selectRoom")
     public Result selectRoom(@RequestBody Room room){
+        System.out.println(room);
         List<Room> selectrooms = userServicer.selectRooms(room);
         if(selectrooms != null){
             return new Result(100,selectrooms,"所有可用的会议室!");
@@ -168,8 +171,8 @@ public class UserController {
 
     // 邀请参会
     @GetMapping("/invite")
-    public Result invite(@RequestBody Invite inviter){
-        boolean flag = userServicer.invite(inviter.getUserId(), inviter.getInviterId(), inviter.getMeetingId());
+    public Result invite(@RequestParam Integer userId, @RequestParam Integer inviterId,@RequestParam Integer meetingId){
+        boolean flag = userServicer.invite(userId, inviterId, meetingId);
         if(flag){
             return new Result(100,null,"邀请成功！");
         }else {
@@ -179,8 +182,8 @@ public class UserController {
 
     // 同意参会
     @GetMapping("/agree")
-    public Result agree(@RequestBody Invite inviter){
-        boolean flag = userServicer.agree(inviter.getUserId(), inviter.getMeetingId());
+    public Result agree(@RequestParam Integer userId, @RequestParam Integer meetingId){
+        boolean flag = userServicer.agree(userId, meetingId);
         if(flag){
             return new Result(100,null,"同意入会！");
         }else {
@@ -191,8 +194,8 @@ public class UserController {
 
     // 拒绝参会
     @GetMapping("/reject")
-    public Result reject(@RequestBody Invite inviter){
-        boolean flag = userServicer.reject(inviter.getUserId(), inviter.getMeetingId());
+    public Result reject(@RequestParam Integer userId, @RequestParam Integer meetingId){
+        boolean flag = userServicer.reject(userId, meetingId);
         if(flag){
             return new Result(100,null,"拒绝入会！");
         }else {
@@ -202,7 +205,7 @@ public class UserController {
 
     // 我的邀请
     @GetMapping("/myInvitations")
-    public Result myInvitations(Integer inviterId){
+    public Result myInvitations(@RequestParam Integer inviterId){
         List<Invite> inviters = userServicer.myInvitations(inviterId);
         if(inviters != null){
             return new Result(100,inviters,"所有的邀请!");
@@ -215,8 +218,27 @@ public class UserController {
 
     // 会议时间可行
     @PostMapping("/isAvailableTime")
-    public Result isAvailableTime(@RequestBody Meeting meeting) throws ParseException {
-        boolean flag = userServicer.isAvailableTime(meeting);
+    public Result isAvailableTime(@RequestBody Meeting meeting){
+        Boolean flag = null;
+        Result result = null;
+        try {
+            flag = userServicer.isAvailableTime(meeting);
+        } catch (ParseException e) {
+            result.setCode(SERVICE_ERROR);
+            result.setData(null);
+            result.setMsg("时间转换出错！请输入正确的时间格式！");
+            throw new RuntimeException(e);
+        }catch (Exception e) {
+            result.setCode(UNKNOWN_ERROR);
+            result.setData(null);
+            result.setMsg("遇到了未知错误");
+            e.printStackTrace();
+        }
+
+        if(flag == null){
+            return result;
+        }
+
         if(flag){
             return new Result(100,true,"会议时间可行！");
         }else {

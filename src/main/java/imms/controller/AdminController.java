@@ -1,5 +1,6 @@
 package imms.controller;
 
+import com.alibaba.druid.pool.GetConnectionTimeoutException;
 import com.alibaba.fastjson.JSON;
 import imms.model.Result;
 import imms.model.Room;
@@ -22,9 +23,14 @@ public class AdminController {
     private AdminServiceInterface adminService;
     @PostMapping(value = "/loginByEmail")
     public Result loginByEmail(@RequestBody User user, HttpServletRequest request){
+        boolean flag;
+        try{
+            flag = adminService.loginByEmail(user.getUserEmail(), user.getUserPassword());
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(UNKNOWN_ERROR,null,"出现了未知错误！");
+        }
         //业务流程
-        boolean flag = adminService.loginByEmail(user.getUserEmail(), user.getUserPassword());
-
         if (flag) {
             //如果登录成功，发送session
             User currentUser = adminService.selectByEmail(user.getUserEmail());//获取当前登录的user的全部信息

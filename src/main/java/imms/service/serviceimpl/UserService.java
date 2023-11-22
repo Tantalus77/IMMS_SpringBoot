@@ -107,7 +107,11 @@ public class UserService implements UserServiceInterface {
         }
         String code = Utils.dateCode();
         meeting.setCode(code);
-        Integer meetingId = mm.addMeeting(meeting);
+
+        mm.addMeeting(meeting);
+
+        Integer meetingId = meeting.getMeetingId();
+        System.out.println(meetingId);
 
         pm.addParticipant(meetingId, meeting.getUserId());
         return true;
@@ -134,6 +138,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public List<Meeting> myOrganizedMeeting(Integer userId) {
         List<Meeting> meetings = mm.selectByUserId(userId);
+        if(meetings.isEmpty()){return null;}
         return meetings;
     }
 
@@ -150,6 +155,7 @@ public class UserService implements UserServiceInterface {
         String dateStr = formatter.format(date);
 
         List<Meeting> meetings = mm.selectByTime(dateStr);
+        if(meetings.isEmpty()){return null;}
         return meetings;
     }
 
@@ -165,6 +171,9 @@ public class UserService implements UserServiceInterface {
     @Override
     public boolean attendMeetingByCode(Integer userId, String code) {
         Meeting meeting = mm.selectByCode(code);
+        if (meeting == null) {
+            return false;
+        }
         Integer meetingId = meeting.getMeetingId();
 
         pm.addParticipant(meetingId, userId);
@@ -193,6 +202,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public List<Room> allRooms() {
         List<Room> rooms = rm.selectAll();
+        if(rooms.isEmpty()){return null;}
         return rooms;
     }
 
@@ -204,6 +214,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public List<Room> selectRooms(Room room) {
         List<Room> roomReturn = rm.selectRoom(room);
+        if(roomReturn.isEmpty()){return null;}
         return roomReturn;
     }
 
@@ -317,11 +328,18 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean isAvailableTime(Meeting meeting) throws ParseException {
-        List<Meeting> curMeetings = mm.selectByRoom(meeting.getRoomId(),meeting.getDate());
+        Date curDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdft = new SimpleDateFormat("yyyy-MM-dd");
+
+        if(sdft.parse(meeting.getDate()).before(curDate)){return false;}
+
+        List<Meeting> curMeetings = mm.selectByRoom(meeting.getRoomId(),meeting.getDate());
+
         Date bt = sdf.parse(meeting.getStartTime());
         Date et = sdf.parse(meeting.getEndTime());
         if(bt.after(et)) return false;
+        if(bt.before(sdf.parse(curDate.toString()))) return false;
         for (Meeting curmeeting:curMeetings) {
             Date curBt = sdf.parse(curmeeting.getStartTime());
             Date curEt = sdf.parse(curmeeting.getEndTime());
