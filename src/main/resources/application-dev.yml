@@ -9,3 +9,17 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: tyq030420!
+  # Redis相关配置
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    # 第0号数据库
+    database: 0
+    jedis:
+      #Redis连接池配置
+      pool:
+        max-active: 8
+        max-wait: 1ms
+        max-idle: 4
+        min-idle: 0
