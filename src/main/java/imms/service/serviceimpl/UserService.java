@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Date;
 
@@ -328,22 +329,35 @@ public class UserService implements UserServiceInterface {
      */
     @Override
     public boolean isAvailableTime(Meeting meeting) throws ParseException {
-        Date curDate = new Date();
+        Date curDateTime = new Date();
+
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         SimpleDateFormat sdft = new SimpleDateFormat("yyyy-MM-dd");
+        Date curDate = sdft.parse(sdft.format(curDateTime));
 
-        if(sdft.parse(meeting.getDate()).before(curDate)){return false;}
+        if(sdft.parse(meeting.getDate()).before(curDate)){
+            return false;
+        }else if(sdft.parse(meeting.getDate()).equals(curDate)){
+            Date curTime = sdf.parse(sdf.format(curDateTime));
+            if(sdf.parse(meeting.getStartTime()).before(curTime)) {
+                return false;
+            }
+        }
 
         List<Meeting> curMeetings = mm.selectByRoom(meeting.getRoomId(),meeting.getDate());
 
         Date bt = sdf.parse(meeting.getStartTime());
         Date et = sdf.parse(meeting.getEndTime());
-        if(bt.after(et)) return false;
-        if(bt.before(sdf.parse(curDate.toString()))) return false;
+        if(bt.after(et)) {
+            return false;
+        }
+
+
         for (Meeting curmeeting:curMeetings) {
             Date curBt = sdf.parse(curmeeting.getStartTime());
             Date curEt = sdf.parse(curmeeting.getEndTime());
-            if(bt.before(curEt) && et.after(curBt)){return false;}
+            if(bt.before(curEt) && et.after(curBt)){
+                return false;}
         }
         return true;
     }
