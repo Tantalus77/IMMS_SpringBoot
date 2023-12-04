@@ -8,6 +8,15 @@ public class Room {
     private String roomNumber;
     private String roomAddress;
 
+    private Integer numberOfUses;
+
+    public Integer getNumberOfUses() {
+        return numberOfUses;
+    }
+
+    public void setNumberOfUses(Integer numberOfUses) {
+        this.numberOfUses = numberOfUses;
+    }
 
     public int getRoomId() {
         return roomId;

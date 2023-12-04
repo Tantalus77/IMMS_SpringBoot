@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Date;
 
@@ -360,6 +362,66 @@ public class UserService implements UserServiceInterface {
                 return false;}
         }
         return true;
+    }
+
+    /**
+     * 根据开始与结束时间找出没有被预约的最空闲会议室，并根据使用程度进行排序，再根据传入的roomSize排除不合要求的会议室
+     * @param startTime
+     * @param endTime
+     * @param date
+     * @return
+     */
+    public List<Room> IntelligentSelectRoomsByTime(String startTime, String endTime, String date, int roomSize){
+        //找出所有冲突的会议
+        List<Meeting> meetings = mm.selectByPeriod(startTime, endTime, date);
+        List<Room> rooms = rm.selectAll();
+        List<Room> newRooms = new ArrayList<>();
+        //找出所有的没有冲突的会议室
+        for(int i = 0; i < meetings.size(); i++){
+            if(rooms.contains(rm.selectRoomById(meetings.get(i).getRoomId()))){
+                rooms.remove(rm.selectRoomById(meetings.get(i).getRoomId()));
+            }
+        }
+
+        //将所有会议室的numberOfUses设为0
+        for (int i = 0; i < rooms.size(); i++) {
+            rooms.get(i).setNumberOfUses(0);
+        }
+
+        //根据会议室使用情况进行排序
+        meetings = mm.selectAll();
+        for(int i = 0; i < meetings.size(); i++){
+            int roomId = meetings.get(i).getMeetingId();
+            if(rooms.contains(rm.selectRoomById(roomId))){
+                //找到这个被预约的会议室，在其numberOfUses上加一
+                //可能会出错，出错就改为双循环
+                rooms.get(rooms.indexOf(rm.selectRoomById(roomId))).setNumberOfUses(rooms.get(rooms.indexOf(rm.selectRoomById(roomId))).getNumberOfUses() + 1);
+            }
+        }
+
+        while(rooms.size() > 0){
+            int min = 999999999;
+            int minId = -1;
+            //根据numberOfUses，对会议室列表进行排序
+            for (int i = 0; i < rooms.size(); i++) {
+                if (rooms.get(i).getNumberOfUses() <= min) {
+                    min = rooms.get(i).getNumberOfUses();
+                    minId = i;
+                }
+            }
+            //将最少使用的会议室放入newRooms并在rooms删除该会议室
+            newRooms.add(rooms.get(minId));
+            rooms.remove(minId);
+        }
+
+        //newRooms里的会议室中如果roomSize小于传入的roomSize则去除
+        for (int i = 0; i < newRooms.size(); i++) {
+            if (newRooms.get(i).getRoomSize() < roomSize) {
+                newRooms.remove(i);
+            }
+        }
+
+        return newRooms;
     }
 }
 
