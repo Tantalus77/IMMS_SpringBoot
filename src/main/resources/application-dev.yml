@@ -5,10 +5,10 @@ server:
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/immstest?useSSL=false
+    url: jdbc:mysql://111.229.32.218:3306/imms_test?useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: tyq030420!
+    username: imms_test
+    password: test
   # Redis相关配置
   redis:
     host: localhost
@@ -23,3 +23,23 @@ spring:
         max-wait: 1ms
         max-idle: 4
         min-idle: 0
+  # 邮件服务配置
+  mail:
+    host: smtp.163.com # 网站发送邮件邮箱服务 host
+    port: 465
+    username: a1137109222@163.com # 邮箱
+    password: CWVKWBKBMGRJXFPG # 密码
+    protocol: smtp
+    default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory

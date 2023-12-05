@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * 使用jedis操作redis
@@ -40,5 +41,13 @@ public class RedisTest {
         redisTemplate.opsForValue().set("myMeetingName123","imms");
         String val = (String) redisTemplate.opsForValue().get("myMeetingName123");
         System.out.println(val);
+    }
+
+    @Test
+    public void testCommon(){
+        Set<String> keys = redisTemplate.keys("*");
+        for (String key : keys) {
+            System.out.println(key);
+        }
     }
 }

@@ -5,17 +5,22 @@ package imms.controller;
 import imms.model.*;
 import imms.service.UserServiceInterface;
 import static imms.utils.Code.*;
+
+import imms.utils.EmailService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 
 @RestController
@@ -133,10 +138,34 @@ public class UserController {
         }
     }
 
+    @Autowired
+    private EmailService emailService;
+    @GetMapping("/sendCode")
+    public Result sendCode(@RequestParam("toEmail") String toEmail){
+        System.out.println("666toEmail:"+toEmail);
+        Random random = new Random();
+        int code = 1000+random.nextInt(8999);//随机产生从1000到9999的数
+//        httpSession.setAttribute("code",code);
+        if(emailService.sendEmail(toEmail,"IMMS验证码","您的验证码为:"+code)){
+            return new Result(100,null,"发送成功");
+        }else{
+            return new Result(220,null,"发送失败");
+        }
+    }
+
     // 通过邮箱注册
+    //
     @PostMapping("/register")
-    public Result register(@RequestBody User user){
-        boolean flag = userServicer.register(user.getUserEmail(), user.getUserPassword());
+    public Result register(@RequestBody Map map, HttpSession httpSession){
+        System.out.println("map.code:"+map.get("code"));
+        System.out.println("map.UserEmail:"+map.get("UserEmail"));
+        System.out.println("map.UserPassword:"+map.get("UserPassword"));
+        String code =httpSession.getAttribute("code").toString();
+//        System.out.println("httpSession.code:"+code);
+        if (!code.equals(map.get("code").toString())){
+            return new Result(220,null,"验证码校验失败!");
+        }
+        boolean flag = userServicer.register(map.get("UserEmail").toString(),map.get("UserPassword").toString());
         if(flag){
             return new Result(100,null,"注册成功！");
         }else {
