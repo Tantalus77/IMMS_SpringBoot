@@ -11,9 +11,10 @@ spring:
     password: test
   # Redis相关配置
   redis:
-    host: localhost
+    host: 111.229.32.218
     port: 6379
-    password: 123456
+    username: default
+    password: immsredis
     # 第0号数据库
     database: 0
     jedis:
