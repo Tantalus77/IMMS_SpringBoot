@@ -32,7 +32,10 @@ public class UserController {
     // 引入对象
     @Autowired
     private UserServiceInterface userServicer;
-
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private EmailService emailService;
     // 用户邮箱登录
     @PostMapping("/loginByEmail")
     public Result userlogin(@RequestBody User user) {
@@ -140,10 +143,8 @@ public class UserController {
         }
     }
 
-    @Autowired
-    private EmailService emailService;
-    @Autowired
-    private RedisTemplate redisTemplate;
+
+
     @GetMapping("/sendCode")
     public Result sendCode(@RequestParam("toEmail") String toEmail){
        // System.out.println("666toEmail:"+toEmail);
@@ -186,8 +187,14 @@ public class UserController {
     // 所有会议室
     @GetMapping("/allRooms")
     public Result allRooms(){
-        List<Room> rooms = userServicer.allRooms();
+        //使用redis缓存数据
+        List<Room> rooms =(List<Room>)redisTemplate.opsForValue().get("allRooms");
+        if(rooms!=null){
+            return new Result(100,rooms,"所有会议室!");
+        }
+        rooms = userServicer.allRooms();
         if(rooms != null){
+            redisTemplate.opsForValue().set("allRooms",rooms,60,TimeUnit.MINUTES);
             return new Result(100,rooms,"所有会议室!");
         }else {
             return new Result(220,null,"没有会议室！");

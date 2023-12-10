@@ -1,6 +1,8 @@
 package imms.model;
 
-public class Room {
+import java.io.Serializable;
+
+public class Room implements Serializable {
     private Integer roomId;
     private int roomSize;
     private String roomOpenTime;
