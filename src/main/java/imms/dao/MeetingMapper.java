@@ -97,4 +97,15 @@ public interface MeetingMapper {
      */
     @Select("select * from meeting where meeting.date <= #{date}")
     List<Meeting> selectByTime(String date);
+
+    /**
+     * 通过某日的一段时间来查询会议
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Select("select * from meeting where meeting.startTime <= #{startTime} and meeting.endTime >= #{endTime} and meeting.date = #{date}")
+    List<Meeting> selectByPeriod(String startTime, String endTime, String date);
+
+
 }

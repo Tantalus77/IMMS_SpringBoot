@@ -1,6 +1,8 @@
 package imms.model;
 
-public class Room {
+import java.io.Serializable;
+
+public class Room implements Serializable {
     private Integer roomId;
     private int roomSize;
     private String roomOpenTime;
@@ -8,6 +10,15 @@ public class Room {
     private String roomNumber;
     private String roomAddress;
 
+    private Integer numberOfUses;
+
+    public Integer getNumberOfUses() {
+        return numberOfUses;
+    }
+
+    public void setNumberOfUses(Integer numberOfUses) {
+        this.numberOfUses = numberOfUses;
+    }
 
     public int getRoomId() {
         return roomId;

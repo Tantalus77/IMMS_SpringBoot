@@ -5,17 +5,24 @@ package imms.controller;
 import imms.model.*;
 import imms.service.UserServiceInterface;
 import static imms.utils.Code.*;
+
+import imms.utils.EmailService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -25,7 +32,10 @@ public class UserController {
     // 引入对象
     @Autowired
     private UserServiceInterface userServicer;
-
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private EmailService emailService;
     // 用户邮箱登录
     @PostMapping("/loginByEmail")
     public Result userlogin(@RequestBody User user) {
@@ -152,11 +162,41 @@ public class UserController {
         }
     }
 
-    // 通过邮箱注册
+
+
+    @GetMapping("/sendCode")
+    public Result sendCode(@RequestParam("toEmail") String toEmail){
+       // System.out.println("666toEmail:"+toEmail);
+        Random random = new Random();
+        int code = 1000+random.nextInt(8999);//随机产生从1000到9999的数
+        //将生成的验证码缓存到redis中，设置有效期5分钟
+        redisTemplate.opsForValue().set("NAME",123213);
+        System.out.println("redis的NAME:"+redisTemplate.opsForValue().get("NAME"));
+        redisTemplate.opsForValue().set(toEmail,code,5, TimeUnit.MINUTES);
+        if(emailService.sendEmail(toEmail,"IMMS验证码","您的验证码为:"+code+",请在5分钟内输入!")){
+            return new Result(100,null,"验证码发送成功");
+        }else{
+            return new Result(220,null,"验证码发送失败");
+        }
+    }
+
+    // 通过邮箱注册(在邮箱注册前先发送验证码:sendCode)
     @PostMapping("/register")
-    public Result register(@RequestBody User user){
-        boolean flag = userServicer.register(user.getUserEmail(), user.getUserPassword());
+    public Result register(@RequestBody Map map, HttpSession httpSession){
+        System.out.println("map.code:"+map.get("code"));
+        System.out.println("map.UserEmail:"+map.get("UserEmail"));
+        System.out.println("map.UserPassword:"+map.get("UserPassword"));
+        //String code =httpSession.getAttribute("code").toString();
+        String code = redisTemplate.opsForValue().get(map.get("UserEmail")).toString();
+//        System.out.println("httpSession.code:"+code);
+        System.out.println("redis中的code:"+code);
+        if (!code.equals(map.get("code").toString())){
+            return new Result(220,null,"验证码校验失败!");
+        }
+        boolean flag = userServicer.register(map.get("UserEmail").toString(),map.get("UserPassword").toString());
         if(flag){
+            //如果注册成功，则删除redis中缓存的验证码
+            redisTemplate.delete(code);
             return new Result(100,null,"注册成功！");
         }else {
             return new Result(220,null,"注册失败！");
@@ -166,8 +206,14 @@ public class UserController {
     // 所有会议室
     @GetMapping("/allRooms")
     public Result allRooms(){
-        List<Room> rooms = userServicer.allRooms();
+        //使用redis缓存数据
+        List<Room> rooms =(List<Room>)redisTemplate.opsForValue().get("allRooms");
+        if(rooms!=null){
+            return new Result(100,rooms,"所有会议室!");
+        }
+        rooms = userServicer.allRooms();
         if(rooms != null){
+            redisTemplate.opsForValue().set("allRooms",rooms,60,TimeUnit.MINUTES);
             return new Result(100,rooms,"所有会议室!");
         }else {
             return new Result(220,null,"没有会议室！");
