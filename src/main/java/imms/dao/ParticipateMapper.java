@@ -44,5 +44,6 @@ public interface ParticipateMapper {
             "from participate p,userinfo u where p.meetingId = #{meetingId} and isAttend = #{isAttend};")
     List<User> checkInList(Integer meetingId, int isAttend);
 
-
+    @Select("select TIMESTAMPDIFF(hour, startTime, endTime) from meeting where meeting.meetingId = #{meetindId};")
+    List<Integer> selectIsAttend(Integer meetingId);
 }

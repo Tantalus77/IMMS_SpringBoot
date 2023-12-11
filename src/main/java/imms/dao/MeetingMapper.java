@@ -4,6 +4,7 @@ import imms.model.Meeting;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -108,4 +109,15 @@ public interface MeetingMapper {
     List<Meeting> selectByPeriod(String startTime, String endTime, String date);
 
 
+    @Select("select roomId, count(roomId) from meeting group by roomId;")
+    List<HashMap<String, Object>> meetingNumberPerRoomBydata();
+
+    @Select("select meeting.date, count(meeting.date) from meeting where meeting.roomId = #{roomId} group by meeting.date;")
+    List<HashMap<String, Object>> selectMeetingNumByData(Integer roomId);
+
+    @Select("select meeting.date, count(meeting.date) from meeting group by meeting.date;")
+    List<HashMap<String, Object>> selectAllMeetingNumByData();
+
+    @Select("select DATEDIFF(HOUR, startTime, endTime) from meeting where meeting.meetingId = #{meetingId}")
+    Double getMeetingDuration(Integer meetindId);
 }

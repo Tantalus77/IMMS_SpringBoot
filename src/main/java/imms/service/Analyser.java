@@ -1,6 +1,7 @@
 package imms.service;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface Analyser {
     /**
@@ -20,4 +21,20 @@ public interface Analyser {
      */
 
     HashMap<Integer,Integer> timesPerRoomOfUser(Integer userId);
+
+    //2.1.某个会议室按日期分类计算会议数量
+    HashMap<String, Integer> meetingNumPerDay(Integer roomId);
+
+    //2.2.按会议室统计会议数量
+    HashMap<Integer,Integer> meetingNumPerRoom();
+
+    //3.1.某个会议的到会率（设置了需要签到的会议）
+    Double attendRate(Integer meetingId);
+
+    //3.2.指定某些会议的平均时长(返回以小时为单位)
+    Double meetingAverageDuration(List<Integer> meetingIds);
+
+    //3.3.按日期分类计算会议数量
+    HashMap<String, Integer> meetingNumByDate();
+
 }
