@@ -2,6 +2,7 @@ package imms.controller;
 
 import com.alibaba.druid.pool.GetConnectionTimeoutException;
 import com.alibaba.fastjson.JSON;
+import imms.model.Meeting;
 import imms.model.Result;
 import imms.model.Room;
 import imms.model.User;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 import static imms.utils.Code.*;
@@ -133,5 +135,59 @@ public class AdminController {
     public Result updateRoom(@RequestBody Room room){
         return adminService.updateRoom(room)?new Result(DAO_SUCCESS, null, "成功更新！"):new Result(DAO_ERROR,null,"更新失败！");
     }
+
+    @GetMapping("/allMeeting")
+    public Result allMeeting(){
+        List<Meeting> meetings;
+        try{
+            meetings = adminService.allMeeting();
+        }catch (Exception e) {
+            return new Result(DAO_ERROR,null,"数据库操作错误！");
+        }
+        return new Result(DAO_SUCCESS,meetings,"查询成功！");
+    }
+
+    @PostMapping("/deleteMeeting")
+    public Result deleteMeeting(@RequestBody List<Integer> meetingIds){
+        try{
+            adminService.deleteMeeting(meetingIds);
+        }catch (Exception e) {
+            return new Result(DAO_ERROR,null,"数据库操作出错！");
+        }
+        return new Result(DAO_SUCCESS,null,"删除成功！");
+
+    }
+
+    @PostMapping("/updateMeeting")
+    public Result updateMeeting(@RequestBody Meeting meeting) {
+        try{
+         adminService.updateMeeting(meeting);
+        }catch (Exception e) {
+            return new Result(DAO_ERROR,null,"数据库操作出错！");
+        }
+        return new Result(DAO_SUCCESS,null,"更新成功！");
+
+    }
+
+    @PostMapping("/selectMeeting")
+    public Result selectMeeting(@RequestBody Meeting condition){
+        List<Meeting> meetings = new ArrayList<>();
+        try {
+            meetings = adminService.selectMeeting(condition);
+        }catch (Exception e) {
+            return new Result(DAO_ERROR,null,"数据库操作出错！");
+        }
+
+        if(meetings.isEmpty()){
+            return new Result(SELECT_ERROR,null,"没有查询到符合条件的会议室!");
+        }
+
+        return new Result(DAO_SUCCESS,meetings,"搜索成功！");
+
+    }
+
+
+
+
 
 }

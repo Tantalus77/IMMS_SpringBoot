@@ -11,7 +11,7 @@ public class Meeting {
     private String introduction;
 
     //0：不需要签到 1：需要签到
-    private Integer needSign;
+    private Integer needSign = 0;
     private String code;
 
     public Integer getMeetingId() {
@@ -114,4 +114,5 @@ public class Meeting {
         this.theme = theme;
         this.introduction = introduction;
     }
+
 }

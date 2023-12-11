@@ -80,12 +80,31 @@ public class UserController {
 
     // 预定会议
     @PostMapping("/reserveMeeting")
-    public Result reserveMeeting(@RequestBody Meeting meeting) throws ParseException {
-        boolean flag = userServicer.reserveMeeting(meeting);
+    public Result reserveMeeting(@RequestBody Meeting meeting){
+        boolean flag = false;
+        Result wrongResult = new Result();
+        try {
+            flag = userServicer.reserveMeeting(meeting);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            wrongResult.setCode(SERVICE_ERROR);
+            wrongResult.setData(null);
+            wrongResult.setMsg("时间转换错误！");
+            throw new RuntimeException(e);
+        } catch (Exception e){
+            e.printStackTrace();
+            wrongResult.setCode(DAO_ERROR);
+            wrongResult.setData(null);
+            wrongResult.setMsg("数据库操作出错！");
+        }
+
         if(flag){
             return new Result(100,null,"预约成功！");
         }else {
-            return new Result(220,null,"预约失败！");
+            if(wrongResult.getCode()!= null){
+                return wrongResult;
+            }
+            return new Result(SERVICE_ERROR,null,"时间冲突了，预约失败！");
         }
     }
 
@@ -94,7 +113,7 @@ public class UserController {
     public Result myMeetings(Integer userId){
         List<Meeting> meetings = userServicer.myMeetings(userId);
         if (meetings != null){
-            return new Result(100,meetings,"查询所有会议！");
+            return new Result(100,meetings,"查询我的会议！");
         }else {
             return new Result(220,null,"查询失败！");
         }

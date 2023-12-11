@@ -146,6 +146,11 @@ public class AdminService implements AdminServiceInterface {
     }
 
     @Override
+    public List<Meeting> allMeeting() {
+        return mm.selectAll();
+    }
+
+    @Override
     public boolean deleteMeeting(List<Integer> meetingId) {
         try{
             for (Integer id:

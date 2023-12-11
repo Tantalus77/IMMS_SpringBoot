@@ -29,7 +29,8 @@ public interface ParticipateMapper {
     List<User> selectParticipants(Integer meetingId);
 
     //4.查询某个人参加的所有会议
-    @Select("select m.meetingId,m.date,m.startTime,m.endTime,m.theme,m.introduction from participate p,userinfo u,meeting m\n" +
+    @Select("select m.meetingId,m.userId,m.roomId,m.date,m.startTime,m.endTime,m.theme,m.introduction,m.code" +
+            " from participate p,userinfo u,meeting m" +
             "where u.userId = #{userId} and u.userId = p.userId and p.meetingId = m.meetingId;")
     List<Meeting> selectMeetings(Integer userId);
 

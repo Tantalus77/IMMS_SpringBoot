@@ -36,6 +36,8 @@ public class Result {
         this.msg = msg;
     }
 
+    public Result(){}
+
     @Override
     public String toString() {
         return "Result{" +

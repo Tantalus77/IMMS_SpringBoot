@@ -1,7 +1,6 @@
 package imms.service;
 
 import imms.model.Meeting;
-import imms.model.Reserve;
 import imms.model.Room;
 import imms.model.User;
 
@@ -92,6 +91,12 @@ import java.util.List;
      * @return
      */
      boolean updateRoom(Room room);
+
+     /**
+      * 查询系统内所有会议
+      * @return
+      */
+     List<Meeting> allMeeting();
 
     /**
      * 删除某个会议

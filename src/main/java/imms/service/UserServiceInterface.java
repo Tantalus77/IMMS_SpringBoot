@@ -143,10 +143,17 @@ import java.util.List;
      List<Invite> myInvitations(Integer userId);
 
     /**
-     * @description: 检查输入的会议时间是否空闲
+     *  检查输入的会议时间是否空闲
      * @param meeting
      * @return
      */
     boolean isAvailableTime(Meeting meeting) throws ParseException;
+
+    /**
+     *  查询某个会议室的所有已有会议
+     * @param roomId
+     * @return
+     */
+    List<Meeting> meetingsOfRoom(Integer roomId);
 
 }
