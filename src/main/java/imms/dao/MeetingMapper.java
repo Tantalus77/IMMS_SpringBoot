@@ -118,6 +118,18 @@ public interface MeetingMapper {
     @Select("select meeting.date, count(meeting.date) from meeting group by meeting.date;")
     List<HashMap<String, Object>> selectAllMeetingNumByData();
 
-    @Select("select DATEDIFF(HOUR, startTime, endTime) from meeting where meeting.meetingId = #{meetingId}")
+    @Select("select timestampdiff(HOUR, startTime, endTime) from meeting where meeting.meetingId = #{meetingId}")
     Double getMeetingDuration(Integer meetindId);
+
+    @Select("select * from meeting where now()  >= startTime and now() <= endTime and date_format(now() , '%Y-%m-%d') = date")
+    List<Meeting> selectAllCurrentMeeting();
+
+    @Select("select roomId, count(*) from meeting where userId = #{userId} group by roomId")
+    List<HashMap<String, Object>> timesPerRoomOfUser(Integer userId);
+
+    @Select("select userId, count(*) from meeting group by userId")
+    List<HashMap<String, Object>> selectMeetingtimesPerUser();
+
+    @Select("select userId, startTime, endTime from meeting group by userId")
+    List<Meeting> selectMeetingTimePerUser();
 }

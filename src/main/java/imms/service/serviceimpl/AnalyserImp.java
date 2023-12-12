@@ -1,5 +1,8 @@
 package imms.service.serviceimpl;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import imms.dao.MeetingMapper;
 import imms.dao.ParticipateMapper;
 import imms.model.Meeting;
@@ -7,8 +10,7 @@ import imms.service.Analyser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author
@@ -37,6 +39,23 @@ public class AnalyserImp implements Analyser {
         return result;
     }
 
+    @Override
+    public Integer totalMeetingNum(Integer userId){
+        List<Meeting> records = mm.selectByUserId(userId);
+        return records.size();
+    }
+
+    @Override
+    public HashMap<Integer, Integer> MeetingtimesPerUser(){
+        HashMap<Integer, Integer> result = new HashMap<>();
+        List<HashMap<String, Object>> records = mm.selectMeetingtimesPerUser();
+        for (HashMap<String, Object> record: records) {
+            Number key = (Number) record.get("userId");
+            Number value = (Number) record.get("meetingNum");
+            result.put(key.intValue(), value.intValue());
+        }
+        return result;
+    }
 
     @Override
     public HashMap<Integer, Integer> meetingNumPerRoom() {
@@ -93,5 +112,10 @@ public class AnalyserImp implements Analyser {
             meetingTotalDuration += mm.getMeetingDuration(meetingId);
         }
         return meetingTotalDuration / meetingIds.size();
+    }
+
+    public Integer currentMeetingNum(){
+        List<Meeting> records = mm.selectAllCurrentMeeting();
+        return records.size();
     }
 }

@@ -8,7 +8,7 @@ public interface Analyser {
      * 1.用户行为
      *  1.1.某个用户预定会议室的次数排序
      *  1.2.某个用户预预定会议的总次数
-     *  1.3.某个用户预定会议室最频繁的时间段
+     *  1.3.某个用户预定会议室最频繁的时间段(暂时搁置)
      *  1.4.用户预定会议次数排行
      * 2.会议室相关
      *  2.1.某个会议室按日期分类计算会议数量
@@ -20,7 +20,14 @@ public interface Analyser {
      *  3.4.当前正在使用的会议室数量
      */
 
+    //1.1.某个用户预定会议室的次数排序
     HashMap<Integer,Integer> timesPerRoomOfUser(Integer userId);
+
+    //1.2.某个用户预预定会议的总次数
+    Integer totalMeetingNum(Integer userId);
+
+    //1.4.用户预定会议次数排行
+    HashMap<Integer, Integer> MeetingtimesPerUser();
 
     //2.1.某个会议室按日期分类计算会议数量
     HashMap<String, Integer> meetingNumPerDay(Integer roomId);
@@ -36,5 +43,8 @@ public interface Analyser {
 
     //3.3.按日期分类计算会议数量
     HashMap<String, Integer> meetingNumByDate();
+
+    //3.4.当前正在使用的会议室数量
+    Integer currentMeetingNum();
 
 }
