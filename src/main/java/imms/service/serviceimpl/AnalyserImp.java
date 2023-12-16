@@ -1,8 +1,5 @@
 package imms.service.serviceimpl;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import imms.dao.MeetingMapper;
 import imms.dao.ParticipateMapper;
 import imms.model.Meeting;
@@ -10,7 +7,8 @@ import imms.service.Analyser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author
@@ -30,6 +28,7 @@ public class AnalyserImp implements Analyser {
         HashMap<Integer,Integer> result = new HashMap<>();
 
         List<HashMap<String,Object>> records = mm.timesPerRoomOfUser(userId);
+        if(result.isEmpty()){return null;}
         for (HashMap<String,Object> record:records) {
             Number key = (Number) record.get("roomId");
             Number value = (Number) record.get("times");
@@ -46,7 +45,7 @@ public class AnalyserImp implements Analyser {
     }
 
     @Override
-    public HashMap<Integer, Integer> MeetingtimesPerUser(){
+    public HashMap<Integer, Integer> meetingtimesPerUser(){
         HashMap<Integer, Integer> result = new HashMap<>();
         List<HashMap<String, Object>> records = mm.selectMeetingtimesPerUser();
         for (HashMap<String, Object> record: records) {
@@ -113,6 +112,7 @@ public class AnalyserImp implements Analyser {
         }
         return meetingTotalDuration / meetingIds.size();
     }
+
 
     public Integer currentMeetingNum(){
         List<Meeting> records = mm.selectAllCurrentMeeting();

@@ -364,6 +364,11 @@ public class UserService implements UserServiceInterface {
         return true;
     }
 
+    @Override
+    public List<Meeting> meetingsOfRoom(Integer roomId) {
+        return mm.selectByRoomId(roomId);
+    }
+
     /**
      * 根据开始与结束时间找出没有被预约的最空闲会议室，并根据使用程度进行排序，再根据传入的roomSize排除不合要求的会议室
      * @param startTime

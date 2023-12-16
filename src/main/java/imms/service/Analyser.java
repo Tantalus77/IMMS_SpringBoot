@@ -27,7 +27,7 @@ public interface Analyser {
     Integer totalMeetingNum(Integer userId);
 
     //1.4.用户预定会议次数排行
-    HashMap<Integer, Integer> MeetingtimesPerUser();
+    HashMap<Integer, Integer> meetingtimesPerUser();
 
     //2.1.某个会议室按日期分类计算会议数量
     HashMap<String, Integer> meetingNumPerDay(Integer roomId);
